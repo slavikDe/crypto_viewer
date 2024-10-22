@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/coin.css">
+
+</head>
+
+<body>
+    <section id="coin-page">
+    <!--    header start -->
+        <header >
+            <div style="font-size: 20px; "><b><a style="text-decoration: none;  color: inherit;" href="../index.html">Crypto Viewer</a></b></div>
+            <div class="auth_tool" >
+                <div class="profile"><a style="color:white; text-decoration: none;" href="../pages/profile.html" >Profile</a></div>
+                <button class="log-in-btn" onclick="window.location.href='login.html'">Log In</button>
+            </div>
+        </header>
+    <!--    content  start   -->
+       <div class="row">
+           <div class="coin_info">
+               <div class="coin-info-container">
+                   <div class="coin_logo"><img src="#" alt="coin_logo"></div>
+                   <div class="coin_name">Bitcoin Price</div>
+               </div>
+               <div class="market-info">
+                   <div class="market-info-item">Price: $<span id="coin-price">66,563.22</span></div>
+                   <div class="market-info-item">Market Cap: <span id="market-cap">$1.3T</span></div>
+               </div>
+           </div>
+
+           <div class="graphics"  >
+               <div class="order-book">
+                   <div class="header">
+                       <ul>
+                           <li>Price (USDT)</li>
+                           <li>Amount (Coin)</li>
+                           <li>Total (USDT)</li>
+                       </ul>
+                   </div>
+
+                   <div class="order-book-item">
+
+                       <div class="ask">
+                           <ul >
+                               <li>Price ask </li>
+                               <li>Amount ask </li>
+                               <li>Total ask </li>
+                           </ul>
+                       </div>
+
+                       <div class="ask">
+                           <ul >
+                               <li>Price ask </li>
+                               <li>Amount ask </li>
+                               <li>Total ask </li>
+                           </ul>
+                       </div>
+
+                       <div class="ask">
+                           <ul >
+                               <li>Price ask </li>
+                               <li>Amount ask </li>
+                               <li>Total ask </li>
+                           </ul>
+                       </div>
+                   </div>
+
+                   <div class="order-book-item">
+
+                       <div class="bid">
+                           <ul >
+                               <li>Price bid </li>
+                               <li>Amount bid </li>
+                               <li>Total bid </li>
+                           </ul>
+                       </div>
+
+                       <div class="bid">
+                           <ul >
+                               <li>Price bid </li>
+                               <li>Amount bid </li>
+                               <li>Total bid </li>
+                           </ul>
+                       </div>
+
+                       <div class="bid">
+                           <ul >
+                               <li>Price bid </li>
+                               <li>Amount bid </li>
+                               <li>Total bid </li>
+                           </ul>
+                       </div>
+                   </div>
+
+
+               </div>
+
+               <div class="price-chart">
+                   <canvas class="chart"></canvas>
+               </div>
+           </div>
+       </div>
+
+    </section>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.2/d3.min.js"
+            integrity="sha512-oKI0pS1ut+mxQZdqnD3w9fqArLyILRsT3Dx0B+8RVEXzEk3aNK3J3pWlaGJ8MtTs1oiwyXDAH6hG6jy1sY0YqA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/script.js"></script>
+</body>
+</html>

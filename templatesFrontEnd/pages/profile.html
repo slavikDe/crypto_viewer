@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
+    <title>P</title>
+</head>
+<body>
+    <header>
+        <div style="font-size: 20px; "><b><a style="text-decoration: none;  color: inherit;" href="../index.html">Crypto Viewer</a></b></div>
+        <div class="auth_tool" style="display: flex; align-items: center; justify-content: space-around; gap:10px">
+            <div class="profile"><a style="text-decoration: none;  color: inherit;" href="profile.html" >Profile</a></div>
+            <button class="log-in-btn" onclick="window.location.href='../pages/login.html'">Log In</button>
+        </div>
+    </header>
+    <!-- Контент на странице -->
+    <div class="row">
+        <div class="container mt-5">
+            <div class="row" style="justify-content: center;">
+                <!-- Профиль с данными пользователя -->
+                <div class="col-md-5">
+                    <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+                        <h3 class="text-center mb-4">Profile</h3>
+                        <form action="" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-12 mb-3 text-center">
+                                <img src="../images/Not%20found%20image.png" alt="User avatar" class="img-fluid rounded-circle" style="max-width: 150px; max-height: 150px;">
+                                <input type="file" class="form-control mt-3" id="id_image"
+                                       name="image"
+                                       accept="image/*">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="id_first_name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="id_first_name"
+                                       name="first_name"
+                                       placeholder="Enter your name"
+                                       value=""
+                                       required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="id_last_name" class="form-label">Surname</label>
+                                <input type="text" class="form-control" id="id_last_name"
+                                       name="last_name"
+                                       placeholder="Enter your surname"
+                                       value=""
+                                       required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="id_username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="id_username"
+                                       placeholder="Enter your username" value="" name="username" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="id_email" class="form-label">Email*</label>
+                                <input type="email" class="form-control" id="id_email"
+                                       placeholder="Enter your email *youremail@example.com" value="" name="email"
+                                       required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

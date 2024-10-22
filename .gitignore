@@ -1,0 +1,5 @@
+# Ignore Python cache
+**/__pycache__/*.pyc
+
+# Ignore all .idea/ folder (for IntelliJ IDEA)
+.idea/

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
+</head>
+<body>
+<section id="login-page">
+
+    <header >
+        <div style="font-size: 20px; "><b><a style="text-decoration: none;  color: inherit;" href="../index.html">Crypto Viewer</a></b></div>
+        <div class="auth_tool" style="display: flex; align-items: center; justify-content: space-around; gap:10px">
+            <div class="profile"><a style="color:white; text-decoration: none;" href="../pages/profile.html" >Profile</a></div>
+            <button class="log-in-btn" onclick="window.location.href='login.html'">Log In</button>
+        </div>
+    </header>
+    <!-- Контент на странице -->
+    <div class="row">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-9 bg-white p-4 mb-5 mx-2 rounded custom-shadow">
+                    <h2 class="text-center mb-4">Sign up</h2>
+                    <form action="" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="if_first_name" class="form-label">First name</label>
+                                <input type="text" class="form-control" id="if_first_name"
+                                       value=""
+                                       name="first_name"
+                                       placeholder="Enter your name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">Surname</label>
+                                <input type="text" class="form-control" id="id_last_name"
+                                       value=""
+                                       name="last_name"
+                                       placeholder="Enter your surname" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="id_username"
+                                       value=""
+                                       name="username"
+                                       placeholder="Enter your username" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_email" class="form-label">Email*</label>
+                                <input type="email" class="form-control" id="id_email"
+                                       value=""
+                                       name="email"
+                                       placeholder="Enter your email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_password1" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="id_password1"
+                                       value=""
+                                       name="password1"
+                                       placeholder="Enter your password" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_password2" class="form-label">Confirm your password</label>
+                                <input type="password" class="form-control" id="id_password2"
+                                       value=""
+                                       name="password2"
+                                       placeholder="Confirm password" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-block">Sign up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

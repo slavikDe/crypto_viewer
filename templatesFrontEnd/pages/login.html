@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
+</head>
+<body>
+<section id="login-page">
+
+    <header >
+        <div style="font-size: 20px; "><b><a style="text-decoration: none;  color: inherit;" href="../index.html">Crypto Viewer</a></b></div>
+        <div class="auth_tool" style="display: flex; align-items: center; justify-content: space-around; gap:10px">
+            <div class="profile"><a style="color:white; text-decoration: none;" href="../pages/profile.html" >Profile</a></div>
+            <button class="log-in-btn" onclick="window.location.href='login.html'">Log In</button>
+        </div>
+    </header>
+
+    <!-- Контент на странице -->
+    <div class="row">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6 bg-white p-4 mb-4 mx-3 rounded custom-shadow">
+                    <h2 class="text-center mb-4">Log in</h2>
+                    <form action="#" method="post">
+                        <input type="hidden" name="next" value="#">
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Name</label>
+                            <input type="text" class="form-control" name="username" id="id_username" placeholder="Enter your name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" id="id_password" placeholder="Enter your password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark btn-block">Enter</button>
+                    </form>
+                    <div class="mt-3">
+                        <a href="#">Forgot password?</a> | <a href="../pages/registration.html">Create account</a>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </section>
+</body>
+</html>
