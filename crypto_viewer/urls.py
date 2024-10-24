@@ -21,6 +21,25 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls', namespace='main')),
-    # path('coin/', include('coin.urls', namespace='coins')),
+    path('coins/', include('coins.urls', namespace='coins')),
     # path('login/', include('users.urls', namespace='user')),
 ]
+
+
+# www.com   main:coins_list
+# www.com/admin/
+# www.com/main/ main:home
+# www.com/coins/<coinName>/
+# www.com
+
+
+
+
+
+
+
+
+
+
+
+

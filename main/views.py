@@ -1,16 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-# Create your views here.
-def index(request):
+# Create your views here.]
+def coin_list(request):
+
+    return render(request, 'main/coins_list.html')
+
+def home(request):
     context = {
-
+        'content' : 'Home page'
     }
-    return render(request, 'main/index.html', context)
+    return render(request, 'main/home.html', context)
 
-
-def about(request):
-    context = {
-
-    }
-    return render(request, 'main/about.html', context)

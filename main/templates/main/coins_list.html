@@ -73,7 +73,7 @@
 
             <!--  content coin start    -->
             <div class="coin_wrapper" style="display:flex; flex-direction: column; height: 100%;">
-                <div class="coin_item_wrapper" href="#">
+                <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' %}'">
                     <div class="coin_item">
                         <div class="coin name" style="flex: 3">
                             <img src="#" alt="logo" class="coin_logo">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
 
-                <div class="coin_item_wrapper" onclick="window.location.href='#'">
+                <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' %}'">
                     <div class="coin_item">
                         <div class="coin name" style="flex: 3">
                             <img src="#" alt="logo" class="coin_logo">

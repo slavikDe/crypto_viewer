@@ -6,18 +6,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title >Crypto Viewer</title>
-    <link rel="stylesheet" href="{% static 'deps/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'deps/css/style.css'%}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'deps/css/bootstrap/bootstrap.min.css' %}">
+    {% block css %}
+    {% endblock %}
 </head>
-<body style="background-image: url('{% static 'deps/images/background.jpg' %}');">
+<body style="background-image: url('{% static 'deps/images/background.jpeg' %}');">
     <!-- Main Page (Crypto Viewer) -->
     <section id="main-page">
         <header>
             <div style="font-size: 20px; "><b><a style="text-decoration: none;  color: inherit;" href="{% url 'main:index' %}">Crypto Viewer</a></b></div>
             <div class="auth_tool" style="display: flex; align-items: center; justify-content: space-around; gap:10px">
-                <div class="profile"><a style="text-decoration: none;  color: inherit;" href="{% static 'user:profile' %}" >Profile</a></div>
-                <button class="log-in-btn" onclick="window.location.href='{% static 'user:login' %}'">Log In</button>
+                <div class="Profile"><a style="text-decoration: none;  color: inherit;" href="#" >Profile</a></div>
+                <div class="Home"><a style="text-decoration: none;  color: inherit;" href="{% url 'main:home' %}" >Home</a></div>
+                <button class="log-in-btn" onclick="window.location.href='#'">Log In</button>
             </div>
         </header>
 
@@ -30,7 +33,6 @@
 
         {% block footer %}
         {% endblock %}
-
     </section>
 
     {% block scripts %}
