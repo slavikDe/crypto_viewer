@@ -1,157 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Viewer</title>
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
-</head>
-<body>
-    <!-- Main Page (Crypto Viewer) -->
-    <section id="main-page">
-        <header>
-            <div style="font-size: 20px; "><b><a style="text-decoration: none;  color: inherit;" href="index.html">Crypto Viewer</a></b></div>
-            <div class="auth_tool" style="display: flex; align-items: center; justify-content: space-around; gap:10px">
-                <div class="profile"><a style="text-decoration: none;  color: inherit;" href="pages/profile.html" >Profile</a></div>
-                <button class="log-in-btn" onclick="window.location.href='pages/login.html'">Log In</button>
-            </div>
-        </header>
+{% extends 'main/base.html' %}
+{% load static %}
 
+{% block content %}
         <div class="content">
 
-            <div class="filter" style="justify-content: space-evenly;">
-                <input type="text" id="coin-search" placeholder="Search coin by name...">
-                <!--    Start filtering    -->
-                <div class="dropdown mb-2">
-                    <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                        Filters
-                    </button>
+        <div class="filter" style="justify-content: space-evenly;">
+            <label for="coin-search"></label>
+            <input type="text" id="coin-search" placeholder="Search coin by name...">
+            <!--    Start filtering    -->
+            <div class="dropdown mb-2">
+                <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    Filters
+                </button>
 
-                    <form action=""  method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
-                        <p class="text-white mx-3 mt-3">Sorting by price:</p>
-                        <div class="form-check text-white mx-3">
-                            <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioDefault1" value="default" checked>
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Default
-                            </label>
-                        </div>
-                        <div class="form-check text-white mx-3">
-                            <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioPriceUp" value="price" >
-                            <label class="form-check-label" for="flexRadioPriceUp">
-                                Price up
-                            </label>
-                        </div>
-                        <div class="form-check text-white mx-3">
-                            <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioPriceDown" value="-price"  >
-                            <label class="form-check-label" for="flexRadioPriceDown">
-                                Price down
-                            </label>
-                        </div>
-                        <p class="text-white mx-3 mt-3">Sorting by volume:</p>
-                        <div class="form-check text-white mx-3">
-                            <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeDefault" value="default" checked >
-                            <label class="form-check-label" for="flexRadioVolumeDefault">
-                                Default
-                            </label>
-                        </div>
-                        <div class="form-check text-white mx-3">
-                            <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeUp" value="volume" >
-                            <label class="form-check-label" for="flexRadioVolumeUp">
-                                Volume Up
-                            </label>
-                        </div>
-                        <div class="form-check text-white mx-3">
-                            <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeDown" value="-volume" >
-                            <label class="form-check-label" for="flexRadioVolumeDown">
-                                Volume Down
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary mx-3 mt-3">Use</button>
-                    </form>
-                </div>
-                <!--    End filtering    -->
+                <form action=""  method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                    <p class="text-white mx-3 mt-3">Sorting by price:</p>
+                    <div class="form-check text-white mx-3">
+                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioDefault1" value="default" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Default
+                        </label>
+                    </div>
+                    <div class="form-check text-white mx-3">
+                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioPriceUp" value="price" >
+                        <label class="form-check-label" for="flexRadioPriceUp">
+                            Price up
+                        </label>
+                    </div>
+                    <div class="form-check text-white mx-3">
+                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioPriceDown" value="-price"  >
+                        <label class="form-check-label" for="flexRadioPriceDown">
+                            Price down
+                        </label>
+                    </div>
+                    <p class="text-white mx-3 mt-3">Sorting by volume:</p>
+                    <div class="form-check text-white mx-3">
+                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeDefault" value="default" checked >
+                        <label class="form-check-label" for="flexRadioVolumeDefault">
+                            Default
+                        </label>
+                    </div>
+                    <div class="form-check text-white mx-3">
+                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeUp" value="volume" >
+                        <label class="form-check-label" for="flexRadioVolumeUp">
+                            Volume Up
+                        </label>
+                    </div>
+                    <div class="form-check text-white mx-3">
+                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeDown" value="-volume" >
+                        <label class="form-check-label" for="flexRadioVolumeDown">
+                            Volume Down
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mx-3 mt-3">Use</button>
+                </form>
             </div>
-
-
-
-            <div class="crypto-list">
-                <!-- header start -->
-                <div class="list_header">
-                    <div class="list_header_item" style="flex: 3">Name</div>
-                    <div class="list_header_item"  style="flex: 2">Price</div>
-                    <div class="list_header_item" style="flex: 2">24h Change</div>
-                    <div class="list_header_item" style="flex: 2">Volume (24h)</div>
-                    <div class="list_header_item" style="flex: 2">Market Cap</div>
-                </div>
-                <!-- header end -->
-
-                <!--  content coin start    -->
-                <div class="coin_wrapper" style="display:flex; flex-direction: column; height: 100%;">
-                    <div class="coin_item_wrapper" onclick="window.location.href='./pages/coin.html '">
-                        <div class="coin_item">
-                            <div class="coin name" style="flex: 3">
-                                <img src="btc_logo.png" alt="logo" class="coin_logo">
-                                <span class="coin_text">BTC Bitcoin</span>
-                            </div>
-                            <div class="coin price" style="flex: 2">$68,206.54</div>
-                            <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
-                            <div class="coin volume" style="flex: 2">$28.00B</div>
-                            <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
-                        </div>
-                    </div>
-
-                    <div class="coin_item_wrapper" onclick="window.location.href='#'">
-                        <div class="coin_item">
-                            <div class="coin name" style="flex: 3">
-                                <img src="btc_logo.png" alt="logo" class="coin_logo">
-                                <span class="coin_text">BTC Bitcoin</span>
-                            </div>
-                            <div class="coin price" style="flex: 2">$68,206.54</div>
-                            <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
-                            <div class="coin volume" style="flex: 2">$28.00B</div>
-                            <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
-                        </div>
-                    </div>
-
-                    <div class="coin_item_wrapper" onclick="window.location.href='#'">
-                        <div class="coin_item">
-                            <div class="coin name" style="flex: 3">
-                                <img src="btc_logo.png" alt="logo" class="coin_logo">
-                                <span class="coin_text">BTC Bitcoin</span>
-                            </div>
-                            <div class="coin price" style="flex: 2">$68,206.54</div>
-                            <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
-                            <div class="coin volume" style="flex: 2">$28.00B</div>
-                            <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
-                        </div>
-                    </div>
-                </div>
-                <!--  content coin end    -->
-            </div>
-        </div>
-        <div class="pagination">
-            <button id="prev-btn" style="border-radius: 4px">Previous</button>
-            <button id="next-btn1" style="border-radius: 4px">1</button>
-            <button id="next-btn2" style="border-radius: 4px">2</button>
-            <button id="next-btn3" style="border-radius: 4px">3</button>
-            <button id="next-btn" style="border-radius: 4px">Next</button>
+            <!--    End filtering    -->
         </div>
 
-        <!--  footer start  -->
+
+        <div class="crypto-list">
+            <!-- header start -->
+            <div class="list_header">
+                <div class="list_header_item" style="flex: 3">Name</div>
+                <div class="list_header_item"  style="flex: 2">Price</div>
+                <div class="list_header_item" style="flex: 2">24h Change</div>
+                <div class="list_header_item" style="flex: 2">Volume (24h)</div>
+                <div class="list_header_item" style="flex: 2">Market Cap</div>
+            </div>
+            <!-- header end -->
+
+            <!--  content coin start    -->
+            <div class="coin_wrapper" style="display:flex; flex-direction: column; height: 100%;">
+                <div class="coin_item_wrapper" href="#">
+                    <div class="coin_item">
+                        <div class="coin name" style="flex: 3">
+                            <img src="#" alt="logo" class="coin_logo">
+                            <span class="coin_text">BTC Bitcoin</span>
+                        </div>
+                        <div class="coin price" style="flex: 2">$68,206.54</div>
+                        <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
+                        <div class="coin volume" style="flex: 2">$28.00B</div>
+                        <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
+                    </div>
+                </div>
+
+                <div class="coin_item_wrapper" onclick="window.location.href='#'">
+                    <div class="coin_item">
+                        <div class="coin name" style="flex: 3">
+                            <img src="#" alt="logo" class="coin_logo">
+                            <span class="coin_text">BTC Bitcoin</span>
+                        </div>
+                        <div class="coin price" style="flex: 2">$68,206.54</div>
+                        <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
+                        <div class="coin volume" style="flex: 2">$28.00B</div>
+                        <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
+                    </div>
+                </div>
+
+                <div class="coin_item_wrapper" onclick="window.location.href='#'">
+                    <div class="coin_item">
+                        <div class="coin name" style="flex: 3">
+                            <img src="#" alt="logo" class="coin_logo">
+                            <span class="coin_text">BTC Bitcoin</span>
+                        </div>
+                        <div class="coin price" style="flex: 2">$68,206.54</div>
+                        <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
+                        <div class="coin volume" style="flex: 2">$28.00B</div>
+                        <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
+                    </div>
+                </div>
+            </div>
+            <!--  content coin end    -->
+        </div>
+    </div>
+    <div class="pagination">
+        <button id="prev-btn" style="border-radius: 4px">Previous</button>
+        <button id="next-btn1" style="border-radius: 4px">1</button>
+        <button id="next-btn2" style="border-radius: 4px">2</button>
+        <button id="next-btn3" style="border-radius: 4px">3</button>
+        <button id="next-btn" style="border-radius: 4px">Next</button>
+    </div>
+{% endblock %}
+
+{% block footer %}
+	<!--  footer start  -->
         <footer>
 
         </footer>
         <!-- footer end   -->
-    </section>
+{% endblock %}
 
-    <script src="js/script.js"></script>
+{% block scripts %}
+    <script src="{% static 'deps/js/script.js' %}"></script>
     <!-- Bootstrap JS (разом з Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
-</body>
-</html>
+{% endblock %}
