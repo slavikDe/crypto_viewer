@@ -37,6 +37,15 @@ ul {
 #coin-price{
     color: green;
 }
+.coin.name{
+    flex:3;
+}
+.coin.price,
+.coin.change,
+.coin.volume,
+.coin.market_cap{
+    flex:2;
+}
 .graphics{
     display: flex;
     flex-direction: column;

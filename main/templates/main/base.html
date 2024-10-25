@@ -18,6 +18,7 @@
         <header>
             <div style="font-size: 20px; "><b><a style="text-decoration: none;  color: inherit;" href="{% url 'main:index' %}">Crypto Viewer</a></b></div>
             <div class="auth_tool" style="display: flex; align-items: center; justify-content: space-around; gap:10px">
+                <div class="admin"><a style="text-decoration: none;  color: inherit;" href="{% url 'admin:index' %}" >Admin panel</a></div>
                 <div class="Profile"><a style="text-decoration: none;  color: inherit;" href="#" >Profile</a></div>
                 <div class="Home"><a style="text-decoration: none;  color: inherit;" href="{% url 'main:home' %}" >Home</a></div>
                 <button class="log-in-btn" onclick="window.location.href='#'">Log In</button>

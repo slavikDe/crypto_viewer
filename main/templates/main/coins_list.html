@@ -73,44 +73,35 @@
 
             <!--  content coin start    -->
             <div class="coin_wrapper" style="display:flex; flex-direction: column; height: 100%;">
-                <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' %}'">
-                    <div class="coin_item">
-                        <div class="coin name" style="flex: 3">
-                            <img src="#" alt="logo" class="coin_logo">
-                            <span class="coin_text">BTC Bitcoin</span>
-                        </div>
-                        <div class="coin price" style="flex: 2">$68,206.54</div>
-                        <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
-                        <div class="coin volume" style="flex: 2">$28.00B</div>
-                        <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
-                    </div>
-                </div>
 
-                <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' %}'">
-                    <div class="coin_item">
-                        <div class="coin name" style="flex: 3">
-                            <img src="#" alt="logo" class="coin_logo">
-                            <span class="coin_text">BTC Bitcoin</span>
-                        </div>
-                        <div class="coin price" style="flex: 2">$68,206.54</div>
-                        <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
-                        <div class="coin volume" style="flex: 2">$28.00B</div>
-                        <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
-                    </div>
-                </div>
+                {% for coin in coins  %}
 
-                <div class="coin_item_wrapper" onclick="window.location.href='#'">
-                    <div class="coin_item">
-                        <div class="coin name" style="flex: 3">
-                            <img src="#" alt="logo" class="coin_logo">
-                            <span class="coin_text">BTC Bitcoin</span>
+                    <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' %}'">
+                        <div class="coin_item">
+                            <div class="coin name" >
+                                {% if coin.image %}
+                                	<img src="{% static coin.image %}" alt="logo" class="coin_logo">
+                                    {% else %}
+                                	<img src="#" alt="logo" class="coin_logo">
+                                {% endif %}
+                                <span class="coin_text">{{ coin.symbol }} {{ coin.name }}</span>
+                            </div>
+                            <div class="coin price">${{ coin.price }}</div>
+                            <div class="coin change">
+                                {% if '+' in coin.change  %}
+                                	<span class="positive">{{ coin.change }} ▲ </span>
+                                    {% else %}
+                                	<span class="negative">{{ coin.change }} ▼ </span>
+                                {% endif %}
+                            </div>
+                            <div class="coin volume">${{ coin.volume }}</div>
+                            <div class="coin market_cap">${{ coin.cap }}B</div>
                         </div>
-                        <div class="coin price" style="flex: 2">$68,206.54</div>
-                        <div class="coin change" style="flex: 2"><span class="positive">+0.52%</span></div>
-                        <div class="coin volume" style="flex: 2">$28.00B</div>
-                        <div class="coin market_cap" style="flex: 2">$1,348.42B</div>
                     </div>
-                </div>
+
+                {% endfor %}
+
+
             </div>
             <!--  content coin end    -->
         </div>
