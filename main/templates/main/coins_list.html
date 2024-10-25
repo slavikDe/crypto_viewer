@@ -86,7 +86,7 @@
                                 {% endif %}
                                 <span class="coin_text">{{ coin.symbol }} {{ coin.name }}</span>
                             </div>
-                            <div class="coin price">${{ coin.price }}</div>
+                            <div class="coin price"></div>
                             <div class="coin change">
                                 {% if '+' in coin.change  %}
                                 	<span class="positive">{{ coin.change }} ▲ </span>
@@ -97,6 +97,7 @@
                             <div class="coin volume">${{ coin.volume }}</div>
                             <div class="coin market_cap">${{ coin.cap }}B</div>
                         </div>
+
                     </div>
 
                 {% endfor %}
