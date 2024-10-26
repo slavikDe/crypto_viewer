@@ -4,7 +4,5 @@ from coins import views
 app_name = 'coins'
 
 urlpatterns = [
-    path('BTC/', views.coin, name='coin'),
-
-
+    path('<slug:coin_slug>/', views.coin, name='coin'),
 ]

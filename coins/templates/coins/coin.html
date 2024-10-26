@@ -9,8 +9,14 @@
 	<div class="row">
            <div class="coin_info">
                <div class="coin-info-container">
-                   <div class="coin_logo"><img src="#" alt="coin_logo"></div>
-                   <div class="coin_name">Bitcoin Price</div>
+                   {% if coin.image %}
+                   	    <div class="coin_logo"><img src="{{ coin.image.url }}" alt="coin_logo"></div>
+                        {% else %}
+                   	    <div class="coin_logo"><img src="{% static 'deps/images/Not found image.png' %}" alt="coin_logo"></div>
+                   {% endif %}
+               {% if coin.name %}
+                    <div class="coin_name"> {{ coin.name }} Price</div>
+               {% endif %}
                </div>
                <div class="market-info">
                    <div class="market-info-item">Price: $<span id="coin-price">66,563.22</span></div>

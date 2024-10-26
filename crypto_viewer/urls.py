@@ -16,21 +16,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 
+from crypto_viewer import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls', namespace='main')),
-    path('coins/', include('coins.urls', namespace='coins')),
-    # path('login/', include('users.urls', namespace='user')),
+    path('coin/', include('coins.urls', namespace='coins')),
 ]
 
+if settings.DEBUG:
+    urlpatterns += [path("__debug__/", include("debug_toolbar.urls")),
+                    ]
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# www.com   main:coins_list
-# www.com/admin/
-# www.com/main/ main:home
-# www.com/coins/<coinName>/
-# www.com
+# localhost:port                    main:home ((greetings page/login suggest))
+# localhost:port/coins              main:coin_list (list of coins)
+# localhost:port/coins/page2        main:coin_list (list of coins + pagination)
+# localhost:port/coins/<coinName>   coins:coin
+
+# localhost:port/admin/
+
 
 
 

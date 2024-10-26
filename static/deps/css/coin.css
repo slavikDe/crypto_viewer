@@ -19,7 +19,12 @@ ul {
 
 }
 .coin_logo{
-    margin: 0 50px 0 20px;
+    margin: 0 20px 0 20px;
+
+}
+.coin_logo img{
+    max-width: 30px;
+    max-height: 30px;
 }
 .market-info{
     display: flex;
