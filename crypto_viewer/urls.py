@@ -31,12 +31,24 @@ if settings.DEBUG:
                     ]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# localhost:port                    main:home ((greetings page/login suggest))
-# localhost:port/coins              main:coin_list (list of coins)
-# localhost:port/coins/page2        main:coin_list (list of coins + pagination)
-# localhost:port/coins/<coinName>   coins:coin
+#   main: (home.html, base.html)
+# host:port                    main:home ((greetings page/login suggest))
 
-# localhost:port/admin/
+#   coinList: (coin_list.html)
+# host:port/coins              main:coin_list (list of coins)
+# host:port/coins/?page=2      main:coin_list (list of coins + pagination)
+# host:port/coins/?<filters>   main:coin_list (list of coins + filters)
+# host:port/coins/search       main:coin_list (list of coins after search)
+
+#   coin: (coin.html)
+# host:port/coins/<coinName>   coins:coin (host:port/coins/BTC)
+
+#   user: (profile.html, login.html==dialog, registration.html==dialog)
+# host:port/user/login
+# host:port/user/signup
+# host:port/user/profile
+
+# host:port/admin/
 
 
 

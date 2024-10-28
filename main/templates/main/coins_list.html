@@ -1,76 +1,84 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load coins_tags %}
 
 {% block content %}
         <div class="content">
 
+        <!--    Start filtering    -->
         <div class="filter" style="justify-content: space-evenly;">
-            <label for="coin-search"></label>
-            <input type="text" id="coin-search" placeholder="Search coin by name...">
-            <!--    Start filtering    -->
+            <!-- Search  -->
+            <form action="{% url 'main:search' %}" method="get" class="d-flex" role="search">
+                <input class="form-control me-2" type="search" id="coin-search" name="q" placeholder="Search coin by name..." aria-label="Search">
+                <button class="btn btn-outline-success text-white" type="submit">Search</button>
+            </form>
+
             <div class="dropdown mb-2">
                 <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                     Filters
                 </button>
 
-                <form action=""  method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                <form action="{% if request.GET.q %}{% url 'main:search' %}{% else %}{% url 'main:index'  %}{% endif %}"  method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                    {% if request.GET.q %}
+                        <input type="hidden" name="q" value="{{ request.GET.q }}">
+                    {% endif %}
                     <p class="text-white mx-3 mt-3">Sorting by price:</p>
+{#                    <div class="form-check text-white mx-3">#}
+{#                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioDefaultPrice" value="default" {% if request.GET.order_by_price == 'default' %}checked{% endif %} >#}
+{#                        <label class="form-check-label" for="flexRadioDefaultPrice">#}
+{#                            Default#}
+{#                        </label>#}
+{#                    </div>#}
                     <div class="form-check text-white mx-3">
-                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioDefaultPrice" value="default" checked>
-                        <label class="form-check-label" for="flexRadioDefaultPrice">
-                            Default
-                        </label>
-                    </div>
-                    <div class="form-check text-white mx-3">
-                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioPriceUp" value="price" >
+                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioPriceUp" value="price" {% if request.GET.order_by_price == 'price' %}checked{% endif %}>
                         <label class="form-check-label" for="flexRadioPriceUp">
                             Price up
                         </label>
                     </div>
                     <div class="form-check text-white mx-3">
-                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioPriceDown" value="-price"  >
+                        <input class="form-check-input" type="radio" name="order_by_price" id="flexRadioPriceDown" value="-price" {% if request.GET.order_by_price == '-price' %}checked{% endif %} >
                         <label class="form-check-label" for="flexRadioPriceDown">
                             Price down
                         </label>
                     </div>
                     <p class="text-white mx-3 mt-3">Sorting by volume:</p>
                     <div class="form-check text-white mx-3">
-                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeDefault" value="default" checked >
+                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeDefault" value="default" {% if request.GET.order_by_volume == 'default' %}checked{% endif %} >
                         <label class="form-check-label" for="flexRadioVolumeDefault">
                             Default
                         </label>
                     </div>
                     <div class="form-check text-white mx-3">
-                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeUp" value="volume" >
+                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeUp" value="volume" {% if request.GET.order_by_volume == 'volume' %}checked{% endif %}>
                         <label class="form-check-label" for="flexRadioVolumeUp">
                             Volume Up
                         </label>
                     </div>
                     <div class="form-check text-white mx-3">
-                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeDown" value="-volume" >
+                        <input class="form-check-input" type="radio" name="order_by_volume" id="flexRadioVolumeDown" value="-volume" {% if request.GET.order_by_volume == '-volume' %}checked{% endif %}>
                         <label class="form-check-label" for="flexRadioVolumeDown">
                             Volume Down
                         </label>
                     </div>
                     <p class="text-white mx-3 mt-3">Sorting by name:</p>
                     <div class="form-check text-white mx-3">
-                        <input class="form-check-input" type="radio" name="order_by_name" id="flexRadioNameAsc" value="Asc" checked>
+                        <input class="form-check-input" type="radio" name="order_by_name" id="flexRadioNameAsc" value="name" {% if request.GET.order_by_name == 'name' %}checked{% endif %}>
                         <label class="form-check-label" for="flexRadioNameAsc">
-                            Name asc
+                            Name ascending
                         </label>
                     </div>
                     <div class="form-check text-white mx-3">
-                        <input class="form-check-input" type="radio" name="order_by_name" id="flexRadioNameDec" value="Des" >
+                        <input class="form-check-input" type="radio" name="order_by_name" id="flexRadioNameDec" value="-name" {% if request.GET.order_by_name == '-name' %}checked{% endif %}>
                         <label class="form-check-label" for="flexRadioNameDec">
-                            Name dec
+                            Name descending
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary mx-3 mt-3">Use</button>
+                    <button type="submit" class="btn btn-primary mx-3 mt-3">Apply</button>
                 </form>
             </div>
-            <!--    End filtering    -->
         </div>
+        <!--    End filtering    -->
 
 
         <div class="crypto-list">
@@ -115,6 +123,7 @@
                 {% endfor %}
 
 
+
             </div>
             <!--  content coin end    -->
         </div>
@@ -122,25 +131,27 @@
 
     <!-- Pagination -->
         <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center my-4 custom-shadow d-flex">
-                <li class="page-item {% if not coins.has_previous %}disabled{% endif %}  ">
-                  <a class="page-link" href="{% if coins.has_previous %}?page={{ coins.previous_page_number }}{% else %}#
-                  {% endif %}">Previous</a>
-                </li>
+            {% if coins.paginator.num_pages > 1 %}
+            	<ul class="pagination justify-content-center my-4 custom-shadow d-flex">
+                    <li class="page-item {% if not coins.has_previous %}disabled{% endif %}  ">
+                      <a class="page-link" href="{% if coins.has_previous %}?{% change_params page=coins.previous_page_number %}{% else %}#
+                      {% endif %}">Previous</a>
+                    </li>
 
-                {% for page in coins.paginator.page_range %}
-                    {% if page >= coins.number|add:-2 and page <= coins.number|add:2 %}
-                    	<li class="page-item {% if coins.number == page %} active {% endif %} ">
-                            <a class="page-link" href="?page={{ page }}" >{{ page }}</a>
-                        </li>
-                    {% endif %} 
-                {% endfor %}
-                
-               <li class="page-item {% if not coins.has_next %}disabled{% endif %}  ">
-                  <a class="page-link" href="{% if coins.has_next %}?page={{ coins.next_page_number }}{% else %}#
-                  {% endif %}">Next</a>
-                </li>
-            </ul>
+                    {% for page in coins.paginator.page_range %}
+                        {% if page >= coins.number|add:-2 and page <= coins.number|add:2 %}
+                            <li class="page-item {% if coins.number == page %} active {% endif %} ">
+                                <a class="page-link" href="?{% change_params page=page %}" >{{ page }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="page-item {% if not coins.has_next %}disabled{% endif %}  ">
+                       <a class="page-link" href="{% if coins.has_next %}?{% change_params page=coins.next_page_number %}{% else %}#
+                       {% endif %}">Next</a>
+                    </li>
+                </ul>
+            {% endif %}
         </nav>
 
 {% endblock %}

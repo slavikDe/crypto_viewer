@@ -13,3 +13,4 @@ def coin(request, coin_slug):
     }
 
     return render(request, 'coins/coin.html', context)
+
