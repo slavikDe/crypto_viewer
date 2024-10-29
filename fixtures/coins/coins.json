@@ -1,1 +1,56 @@
-[{"model": "coins.coins", "pk": 1, "fields": {"image": "media/coinIcons/eth.png", "symbol": "ETH", "name": "Ethereum", "slug": "eth", "price": null, "change": null, "volume": null, "cap": null}}, {"model": "coins.coins", "pk": 2, "fields": {"image": "media/coinIcons/Untitled.png", "symbol": "BTC", "name": "Bitcoin", "slug": "btc", "price": null, "change": null, "volume": null, "cap": null}}, {"model": "coins.coins", "pk": 3, "fields": {"image": "media/coinIcons/aleo.jpeg", "symbol": "Aloe", "name": "Aloe", "slug": "aloe", "price": null, "change": null, "volume": null, "cap": null}}, {"model": "coins.coins", "pk": 4, "fields": {"image": "", "symbol": "Litecoin", "name": "Litecoin", "slug": "litecoin", "price": null, "change": null, "volume": null, "cap": null}}, {"model": "coins.coins", "pk": 5, "fields": {"image": "", "symbol": "XRP", "name": "Ripple", "slug": "xrp", "price": null, "change": null, "volume": null, "cap": null}}, {"model": "coins.coins", "pk": 6, "fields": {"image": "", "symbol": "DOT", "name": "Polkadot", "slug": "dot", "price": null, "change": null, "volume": null, "cap": null}}]
+[
+    {
+        "model": "coins.coins",
+        "pk": 1,
+        "fields": {
+            "symbol": "ETH",
+            "name": "Ethereum",
+            "slug": "eth"
+        }
+    },
+    {
+        "model": "coins.coins",
+        "pk": 2,
+        "fields": {
+            "symbol": "BTC",
+            "name": "Bitcoin",
+            "slug": "btc"
+        }
+    },
+    {
+        "model": "coins.coins",
+        "pk": 3,
+        "fields": {
+            "symbol": "Aloe",
+            "name": "Aloe",
+            "slug": "aloe"
+        }
+    },
+    {
+        "model": "coins.coins",
+        "pk": 4,
+        "fields": {
+            "symbol": "Litecoin",
+            "name": "Litecoin",
+            "slug": "litecoin"
+        }
+    },
+    {
+        "model": "coins.coins",
+        "pk": 5,
+        "fields": {
+            "symbol": "XRP",
+            "name": "Ripple",
+            "slug": "xrp"
+        }
+    },
+    {
+        "model": "coins.coins",
+        "pk": 6,
+        "fields": {
+            "symbol": "DOT",
+            "name": "Polkadot",
+            "slug": "dot"
+        }
+    }
+]

@@ -37,12 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
+
 
     # 'channels',
     'debug_toolbar',
 
     'main',
     'coins',
+    'coinList',
 ]
 
 MIDDLEWARE = [
@@ -83,8 +86,12 @@ WSGI_APPLICATION = 'crypto_viewer.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'crypto_viewer',
+        'USER' : 'root_crvw',
+        'PASSWORD' : 'root',
+        'HOST' : 'localhost',
+        'PORT' : '5432',
     }
 }
 

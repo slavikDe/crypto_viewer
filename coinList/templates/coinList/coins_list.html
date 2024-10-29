@@ -8,7 +8,7 @@
         <!--    Start filtering    -->
         <div class="filter" style="justify-content: space-evenly;">
             <!-- Search  -->
-            <form action="{% url 'main:search' %}" method="get" class="d-flex" role="search">
+            <form action="{% url 'coinList:search' %}" method="get" class="d-flex" role="search">
                 <input class="form-control me-2" type="search" id="coin-search" name="q" placeholder="Search coin by name..." aria-label="Search">
                 <button class="btn btn-outline-success text-white" type="submit">Search</button>
             </form>
@@ -19,7 +19,7 @@
                     Filters
                 </button>
 
-                <form action="{% if request.GET.q %}{% url 'main:search' %}{% else %}{% url 'main:index'  %}{% endif %}"  method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                <form action="{% if request.GET.q %}{% url 'coinList:search' %}{% else %}{% url 'coinList:index'  %}{% endif %}"  method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
                     {% if request.GET.q %}
                         <input type="hidden" name="q" value="{{ request.GET.q }}">
                     {% endif %}
@@ -165,7 +165,8 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'deps/js/script.js' %}"></script>
+    <script src="{% static 'deps/js/coinList.js' %}"></script>
+
     <!-- Bootstrap JS (разом з Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>

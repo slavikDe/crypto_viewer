@@ -5,7 +5,7 @@ app_name = 'main'
 
 urlpatterns = [
 
-    path('', views.coin_list, name='index'),
-    path('search/', views.coin_list, name='search'),
-    path('home/', views.home, name='home'),
+    # path('', views.coin_list, name='index'),
+    # path('search/', views.coin_list, name='search'),
+    path('', views.index, name='home'),
 ]

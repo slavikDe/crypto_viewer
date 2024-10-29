@@ -23,6 +23,7 @@ from crypto_viewer import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls', namespace='main')),
+    path('coins/', include('coinList.urls', namespace='coinList')),
     path('coin/', include('coins.urls', namespace='coins')),
 ]
 
