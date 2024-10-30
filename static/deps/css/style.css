@@ -87,7 +87,7 @@ footer{
     height: 20px;
     margin-right: 10px;
 }
-.coin_text {
+.coin_symbol {
     display: inline-block;
 }
 .coin.price, .coin.volume, .coin.market_cap {

@@ -92,42 +92,57 @@
             </div>
             <!-- header end -->
 
+{#                 <div id="coin_item_wrapper_test" onclick="">#}
+{#                        <div class="coin_item" data-symbol="BTC"  data-price="">#}
+{#                            <div class="coin name" >#}
+{#                                	<img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">#}
+{#                                <span class="coin_symbol">BTC</span>#}
+{#                            </div>#}
+{#                            <div class="coin price">additional</div>#}
+{#                            <div class="coin change">#}
+{#                                	<span class="negative">▼ </span>#}
+{#                            </div>#}
+{#                            <div class="coin volume"></div>#}
+{#                            <div class="coin market_cap"></div>#}
+{#                        </div>#}
+{#                </div>#}
+
+
             <!--  content coin start    -->
             <div class="coin_wrapper" style="display:flex; flex-direction: column; height: 100%;">
 
                 {% for coin in coins  %}
 
                     <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' coin.slug %}'">
-                        <div class="coin_item">
+                        <div class="coin_item" data-symbol="{{ coin.symbol }}"  data-price="">
                             <div class="coin name" >
                                 {% if coin.image %}
                                 	<img src="{{ coin.image.url }}" alt="logo" class="coin_logo">
                                     {% else %}
                                 	<img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">
                                 {% endif %}
-                                <span class="coin_text">{{ coin.symbol }} {{ coin.name }}</span>
+                                <span class="coin_symbol">{{ coin.symbol }}</span>
                             </div>
-                            <div class="coin price">${{ coin.price }}</div>
+                            <div class="coin price"></div>
                             <div class="coin change">
                                 {% if '+' in coin.change  %}
-                                	<span class="positive">{{ coin.change }} ▲ </span>
+                                	<span class="positive">▲ </span>
                                     {% else %}
-                                	<span class="negative">{{ coin.change }} ▼ </span>
+                                	<span class="negative">▼ </span>
                                 {% endif %}
                             </div>
-                            <div class="coin volume">${{ coin.volume }}</div>
-                            <div class="coin market_cap">${{ coin.cap }}B</div>
+                            <div class="coin volume"></div>
+                            <div class="coin market_cap"></div>
                         </div>
                     </div>
+
 
                 {% endfor %}
 
 
-
-            </div>
             <!--  content coin end    -->
         </div>
-    </div>
+
 
     <!-- Pagination -->
         <nav aria-label="Page navigation example">
@@ -154,6 +169,7 @@
             {% endif %}
         </nav>
 
+
 {% endblock %}
 
 {% block footer %}
@@ -165,7 +181,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'deps/js/coinList.js' %}"></script>
+    <script src="{% static 'deps/js/testing/main.js' %}"></script>
 
     <!-- Bootstrap JS (разом з Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

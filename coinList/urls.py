@@ -6,5 +6,4 @@ app_name = 'coinList'
 urlpatterns = [
     path('', views.coin_list, name='index'),
     path('search/', views.coin_list, name='search'),
-
 ]

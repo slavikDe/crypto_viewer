@@ -1,37 +1,17 @@
-
-//
-//
-// const worker = new Worker('dataWorker.js');
-//
-// //  listen to messages from the worker with new data
-// worker.addEventListener('message', (event) => {
-//   const updatedData = event.data;
-//   updatePageWithNewData(updatedData); // func for update DOM
-// });
-//
-// // func for update DOM with new data
-// function updatePageWithNewData(data) {
-//   const displayElement = document.getElementById('liveData'); // our html teg of coin in coinList
-//   displayElement.textContent = `Ціна: ${data.price}, Обсяг: ${data.volume}`;// test
-// }
-
 class SocketConn {
   constructor(url, method, params) {
     this.url = url;
     this.method = method;
     this.params = params || [];
 
-    // Ініціалізація WebSocket-з'єднання
     this.socket = new WebSocket(this.url);
 
-    // Встановлення обробників подій
     this.socket.addEventListener('open', () => this.onOpen());
     this.socket.addEventListener('message', (event) => this.onMessage(event));
     this.socket.addEventListener('error', (error) => this.onError(error));
     this.socket.addEventListener('close', () => this.onClose());
   }
 
-  // Метод, що виконується при відкритті з'єднання
   onOpen() {
     console.log('WebSocket opened', this.params);
 
@@ -44,7 +24,6 @@ class SocketConn {
     this.socket.send(tradeStr);
   }
 
-  // Метод для обробки повідомлень від сервера
   onMessage(event) {
     const data = JSON.parse(event.data);
 

@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from coins.models import Coins
 from main.utils import q_search
-
+from django.http import JsonResponse
 
 def coin_list(request):
     # filtering
@@ -38,4 +38,6 @@ def coin_list(request):
     }
 
     return render(request, 'coinList/coins_list.html', context)
+
+
 
