@@ -1,11 +1,6 @@
-{% extends 'main/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
     <h1>{{ content }}</h1>
-     <h1>WebSocket Data:</h1>
-    <div id="liveData">Waiting data...</div>
-{#    <script src="{% static 'deps/js/testing/main.js' %}"></script>#}
-    <script src="{% static 'deps/js/jsForHomePage/main.js' %}"></script>
-    <script src="{% static 'deps/js/jsForHomePage/worker.js' %}"></script>
 {% endblock %}

@@ -15,6 +15,7 @@ function createWorker(symbol){
     worker.postMessage({market_url, method, params});
 
     worker.addEventListener('message', (event) => {
+        console.log("From main thread worker logs: ", event.data);
 
         if(event.data) {
             console.log(`event data ${symbol}` , event.data)
@@ -27,10 +28,11 @@ function createWorker(symbol){
 console.log('Main thread is running.');
 
 function updateCoinPrice(symbol, newPrice) {
+        console.log("updateCoinPrice: ",  symbol , " ", newPrice);
 
     const coinItems = Array.from(document.querySelectorAll('.coin_item_wrapper'));
     const coinItem = coinItems.find(item => item.querySelector('.coin_item').getAttribute('data-symbol') === symbol); // Шукаємо відповідний символ
-    // console.log("coinItem ", coinItem);
+    console.log("coinItem ", coinItem);
     if (coinItem) {
             coinItem.querySelector('.coin.price').textContent = newPrice; // Оновлюємо ціну
     }

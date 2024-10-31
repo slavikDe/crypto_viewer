@@ -25,6 +25,8 @@ urlpatterns = [
     path('', include('main.urls', namespace='main')),
     path('coins/', include('coinList.urls', namespace='coinList')),
     path('coin/', include('coins.urls', namespace='coins')),
+    path('user/', include('users.urls', namespace='user')),
+
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title >Crypto Viewer</title>
+    <link rel="stylesheet" href="{% static 'deps/css/style.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'deps/css/bootstrap/bootstrap.min.css' %}">
+    {% block css %}
+    {% endblock %}
+</head>
+
+<body style="background-image: url('{% static 'deps/images/background.jpeg' %}');">
+    <!-- Main Page (Crypto Viewer) -->
+    <section id="main-page">
+        <header>
+            <div class="container" >
+                <div>
+                    <a class="navbar-brand" href="{% url "main:home" %}">Home</a>
+                </div>
+                <div style="  text-align: center;">
+                    <a class="navbar-brand" href="{% url "coinList:index" %}">Coin List</a>
+                </div>
+                <div class=" dropdown d-flex justify-content-end">
+                    <a class="nav-link dropdown-toggle text-white"  role="button" data-bs-toggle="dropdown">
+                        Account
+                    </a>
+                    <ul class="dropdown-menu"  style="background-color:#3a3939; " >
+                        <li><a class="dropdown-item text-white" href="#">Admin panel</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'user:profile' %}">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-white" href="#">Log out</a></li>
+                    </ul>
+                </div>
+{#                <button class="log-in-btn" onclick="window.location.href='{% url 'user:login' %}'" >Log In</button>#}
+            </div>
+        </header>
+
+        {% block content %}
+        {% endblock %}
+    </section>
+
+
+    {% block footer %}
+    {% endblock %}
+    <script src="{% static 'deps/js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+</html>

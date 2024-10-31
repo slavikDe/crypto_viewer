@@ -6,5 +6,3 @@ def index(request):
         'content': 'Home page'
     }
     return render(request, 'main/home.html', context)
-
-

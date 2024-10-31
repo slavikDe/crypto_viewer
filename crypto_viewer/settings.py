@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'main',
     'coins',
     'coinList',
+    'users',
 ]
 
 MIDDLEWARE = [

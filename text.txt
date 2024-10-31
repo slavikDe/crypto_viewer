@@ -3,8 +3,6 @@
 
        pare :  saving as json
 
-connections :  sockets opening from user on js
-
 find js framework for multithreading
 
 

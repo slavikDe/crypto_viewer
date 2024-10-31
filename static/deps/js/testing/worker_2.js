@@ -1,6 +1,8 @@
-self.addEventListener('message', (event) => {
-    const { market_url, method ,params } = event.data;
+self.onmessage = function(event) {
+    const { market_url, method, params } = event.data;
 
+    // Log received data to verify
+    console.log('Received data in Web Worker:', event.data);
     const socket = new WebSocket(market_url);
 
     socket.addEventListener('open', () => {
@@ -10,12 +12,12 @@ self.addEventListener('message', (event) => {
 
         socket.send(tradeStr);
     });
-
     socket.addEventListener('message', (event) => {
         const receivedData = event.data;
+        console.log("Received data", receivedData, ", time: ", Date.now());
 
-        console.log("Received data", receivedData);
-        const processedData = {price: 'na', volume : 'na'}
+        const symbol = params[0].match(/@(\w+)USDT$/)[1];
+        const processedData = {price: 'waiting...', volume : 'waiting...', symbol: symbol};
        // parsing data
        try  {
             const parsedData = JSON.parse(receivedData);
@@ -32,8 +34,8 @@ self.addEventListener('message', (event) => {
         }
 
         console.log("ProcessedData send to main thread msg: ", processedData, ", time: ", Date.now());
-        self.postMessage(processedData);
 
+        self.postMessage(processedData);
     });
 
     socket.addEventListener('error', (error) => {
@@ -44,4 +46,5 @@ self.addEventListener('message', (event) => {
         console.log('WebSocket closed');
 
     });
-});
+
+};
