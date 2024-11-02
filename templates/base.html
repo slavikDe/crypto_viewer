@@ -27,9 +27,9 @@
                 <div class=" dropdown d-flex justify-content-end">
                     <a class="nav-link dropdown-toggle text-white"  role="button" data-bs-toggle="dropdown">
                         Account
-                    </a>
+                    </a> 
                     <ul class="dropdown-menu"  style="background-color:#3a3939; " >
-                        <li><a class="dropdown-item text-white" href="#">Admin panel</a></li>
+                        <li><a class="dropdown-item text-white" href="{% url 'admin:index' %}">Admin panel</a></li>
                         <li><a class="dropdown-item text-white" href="{% url 'user:profile' %}">Profile</a></li>
                         <li>
                             <hr class="dropdown-divider">
@@ -37,12 +37,14 @@
                         <li><a class="dropdown-item text-white" href="#">Log out</a></li>
                     </ul>
                 </div>
-{#                <button class="log-in-btn" onclick="window.location.href='{% url 'user:login' %}'" >Log In</button>#}
+                <button class="log-in-btn" onclick="window.location.href='{% url 'user:login' %}'" >Log In</button>
             </div>
         </header>
 
+        {% include  "includes/notifications.html" %}
         {% block content %}
         {% endblock %}
+    
     </section>
 
 
