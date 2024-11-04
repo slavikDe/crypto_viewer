@@ -7,7 +7,7 @@ from coins.models import Coins
 
 class Users(AbstractUser):
     user_custom_pair = models.CharField(blank=True, null=True)
-    user_avatar = models.ImageField(upload_to="media/avatars/", blank=True, null=True, verbose_name="Avatar")
+    image = models.ImageField(upload_to='users_images', blank=True, null=True, verbose_name="avatar")
     coins = models.ManyToManyField(Coins, blank=True, null=True)
 
     class Meta:
