@@ -41,7 +41,8 @@ INSTALLED_APPS = [
 
 
     # 'channels',
-    'debug_toolbar',
+    'chartjs',
+    # 'debug_toolbar',
 
     'main',
     'coins',
@@ -58,7 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'crypto_viewer.urls'

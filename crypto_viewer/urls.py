@@ -30,8 +30,8 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += [path("__debug__/", include("debug_toolbar.urls")),
-                    ]
+    # urlpatterns += [path("__debug__/", include("debug_toolbar.urls")),
+    #                 ]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #   main: (home.html, base.html)

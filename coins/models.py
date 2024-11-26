@@ -1,9 +1,9 @@
 from django.db import models
 
 class Coins(models.Model):
-    symbol = models.CharField(max_length=10, unique=True, verbose_name="Symbol", blank=True, null=True)
+    symbol = models.CharField(max_length=20, unique=True, verbose_name="Symbol", blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Name")
-    image = models.ImageField(upload_to='media/coinIcons', blank=True, null=True, verbose_name='image')
+    image = models.ImageField( blank=True, null=True, verbose_name='image')
     slug = models.SlugField(max_length=100, unique=True, verbose_name="URL", blank=True, null=True)
 
     def __str__(self):

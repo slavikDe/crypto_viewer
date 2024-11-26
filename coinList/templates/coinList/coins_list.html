@@ -1,125 +1,102 @@
-{% extends 'base.html' %}{% load static %}
+{% extends 'base.html' %}
+{% load static %}
 {% load coins_tags %}
 
 {% block content %}
-        <div class="content">
+<div class="content">
 
-        <!--    Start filtering    -->
-        <div class="filter" style="justify-content: space-evenly;">
-            <!-- Search  -->
-            <form action="{% url 'coinList:search' %}" method="get" class="d-flex" role="search">
-                <input class="form-control me-2" type="search" id="coin-search" name="q" placeholder="Search coin by name..." aria-label="Search">
-                <button class="btn btn-outline-success text-white" type="submit">Search</button>
-            </form>
-        </div>
-        <!--    End filtering    -->
+    <!-- Start filtering -->
+    <div class="filter" style="justify-content: space-evenly;">
+        <!-- Search -->
+        <form action="{% url 'coinList:search' %}" method="get" class="d-flex" role="search">
+            <input class="form-control me-2" type="search" id="coin-search" name="q" placeholder="Search coin by name..." aria-label="Search">
+            <button class="btn btn-outline-success text-white" type="submit">Search</button>
+        </form>
+    </div>
+    <!-- End filtering -->
 
-
-        <div class="crypto-list">
-            <!-- header start -->
-            <div class="list_header">
-                <div class="list_header_item" style="flex: 3">Name</div>
-{#                    #}
-                <div class="list_header_item"  style="flex: 2">
-                    <div onclick="toggleSortOrder()" style="cursor: pointer">Price &#x25b4;&#x25be;</div>
-                </div>
-                <div class="list_header_item" style="flex: 2">24h Change</div>
-                <div class="list_header_item" style="flex: 2">Volume (24h)</div>
-                <div class="list_header_item" style="flex: 2">Market Cap</div>
+    <div class="crypto-list">
+        <!-- header start -->
+        <div class="list_header">
+            <div class="list_header_item" style="flex: 3">Name</div>
+            <div class="list_header_item" style="flex: 2">
+                <div  style="cursor: pointer">Price <span onclick="toggleSortOrder()">&#x25b4;&#x25be;</span></div>
             </div>
-            <!-- header end -->
-
-{#                 <div id="coin_item_wrapper_test" onclick="">#}
-{#                        <div class="coin_item" data-symbol="BTC"  data-price="">#}
-{#                            <div class="coin name" >#}
-{#                                	<img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">#}
-{#                                <span class="coin_symbol">BTC</span>#}
-{#                            </div>#}
-{#                            <div id="coin_rice2221">additional</div>#}
-{#                            <div class="coin change">#}
-{#                                	<span class="negative">▼ </span>#}
-{#                            </div>#}
-{#                            <div class="coin volume"></div>#}
-{#                            <div class="coin market_cap"></div>#}
-{#                        </div>#}
-{#                </div>#}
-
-
-            <!--  content coin start    -->
-            <div class="coin_wrapper" style="display:flex; flex-direction: column; height: 100%;">
-
-                {% for coin in coins  %}
-
-                    <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' coin.slug %}'">
-                        <div class="coin_item" data-symbol="{{ coin.symbol }}">
-                            <div class="coin name" >
-                                {% if coin.image %}
-                                	<img src="{{ coin.image.url }}" alt="logo" class="coin_logo">
-                                    {% else %}
-                                	<img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">
-                                {% endif %}
-                                <span class="coin_symbol">{{ coin.symbol }}</span>
-                            </div>
-                            <div class="coin price">waiting...</div>
-                            <div class="coin change">
-                                {% if '+' in coin.change  %}
-                                	<span class="positive">▲ </span>
-                                    {% else %}
-                                	<span class="negative">▼ </span>
-                                {% endif %}
-                            </div>
-                            <div class="coin volume"></div>
-                            <div class="coin market_cap"></div>
-                        </div>
-                    </div>
-            {% endfor %}
-
-
-            <!--  content coin end    -->
+            <div class="list_header_item" style="flex: 2">Volume</div>
+            <div class="list_header_item" style="flex: 2">24h Change</div>
         </div>
+        <!-- header end -->
 
+        <!-- content coin start -->
+        <div class="coin_wrapper" style="display:flex; flex-direction: column; height: 100%;">
+            {% for coin in coins %}
+            <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' coin_slug=coin.slug %}'">
+                <div class="coin_item" data-symbol="{{ coin.symbol }}">
+                    <div class="coin name">
+                        {% if coin.image %}
+                        <img src="{{ coin.image.url }}" alt="logo" class="coin_logo">
+                        {% else %}
+                        <img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">
+                        {% endif %}
+                        <span class="coin_symbol">{{ coin.symbol }}</span>
+                    </div>
+                    <div class="coin price">{{ coin.price }}</div>
+                    <div class="coin volume">{{ coin.volume }}</div>
+                    <div class="coin change">
+                        {% if  coin.change > 0 %}
+                            <span class="positive">▲ {{  coin.change }}%</span>
+                            {% else %}
+                            <span class="negative">▼ {{  coin.change }}%</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+         <!-- content coin end -->
+    </div>
 
     <!-- Pagination -->
-        <nav aria-label="Page navigation example">
-            {% if coins.paginator.num_pages > 1 %}
-            	<ul class="pagination justify-content-center my-4 custom-shadow d-flex">
-                    <li class="page-item {% if not coins.has_previous %}disabled{% endif %}  ">
-                      <a class="page-link" href="{% if coins.has_previous %}?{% change_params page=coins.previous_page_number %}{% else %}#
-                      {% endif %}">Previous</a>
-                    </li>
+    <nav aria-label="Page navigation example">
+        {% if coins.paginator.num_pages > 1 %}
+        <ul class="pagination justify-content-center custom-shadow d-flex">
+            <li class="page-item {% if not coins.has_previous %}disabled{% endif %}">
+                <a class="page-link" href="?page=1">&laquo; First</a>
+            </li>
+            <li class="page-item {% if not coins.has_previous %}disabled{% endif %}">
+                <a class="page-link" href="{% if coins.has_previous %}?{% change_params page=coins.previous_page_number %}{% else %}# {% endif %}">Previous</a>
+            </li>
 
-                    {% for page in coins.paginator.page_range %}
-                        {% if page >= coins.number|add:-2 and page <= coins.number|add:2 %}
-                            <li class="page-item {% if coins.number == page %} active {% endif %} ">
-                                <a class="page-link" href="?{% change_params page=page %}" >{{ page }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-
-                    <li class="page-item {% if not coins.has_next %}disabled{% endif %}  ">
-                       <a class="page-link" href="{% if coins.has_next %}?{% change_params page=coins.next_page_number %}{% else %}#
-                       {% endif %}">Next</a>
-                    </li>
-                </ul>
+            {% for page in coins.paginator.page_range %}
+            {% if page >= coins.number|add:-2 and page <= coins.number|add:2 %}
+            <li class="page-item {% if coins.number == page %} active {% endif %}">
+                <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
+            </li>
             {% endif %}
-        </nav>
+            {% endfor %}
 
-
+            <li class="page-item {% if not coins.has_next %}disabled{% endif %}">
+                <a class="page-link" href="{% if coins.has_next %}?{% change_params page=coins.next_page_number %}{% else %}# {% endif %}">Next</a>
+            </li>
+            <li class="page-item {% if not coins.has_next %}disabled{% endif %}">
+                <a class="page-link" href="?page={{ coins.paginator.num_pages }}">Last &raquo;</a>
+            </li>
+        </ul>
+        {% endif %}
+    </nav>
+</div>
 {% endblock %}
 
-{% block footer %}
-	<!--  footer start  -->
-        <footer>
-
-        </footer>
-        <!-- footer end   -->
-{% endblock %}
+{#{% block footer %}#}
+{#    <!-- footer start -->#}
+{#    <footer>#}
+{#    </footer>#}
+{#    <!-- footer end -->#}
+{#{% endblock %}#}
 
 {% block scripts %}
-    <script src="{% static 'deps/js/testing/main_2.js' %}"></script>
 
-    <!-- Bootstrap JS (разом з Popper.js) -->
-{#    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>#}
-{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>#}
+    <script src="{% static 'deps/js/main_2.js' %}"></script>
+    <script src="{% static 'deps/js/sorting.js' %}"></script>
 
 {% endblock %}

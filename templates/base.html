@@ -7,45 +7,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title >Crypto Viewer</title>
     <link rel="stylesheet" href="{% static 'deps/css/style.css' %}">
+    <link rel="icon" href="{% static 'deps/images/logo.png' %}" style="width: 32px;" type="image/x-icon">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'deps/css/bootstrap/bootstrap.min.css' %}">
+
     {% block css %}
     {% endblock %}
 </head>
 
-<body style="background-image: url('{% static 'deps/images/background.jpeg' %}');">
+<body style="background-color:  #A9B9C8 !important;">
     <!-- Main Page (Crypto Viewer) -->
     <section id="main-page">
         <header>
-            <div class="container" >
-                <div>
-                    <a class="navbar-brand" href="{% url "main:home" %}">Home</a>
-                </div>
-                <div style="  text-align: center;">
-                    <a class="navbar-brand" href="{% url "coinList:index" %}">Coin List</a>
-                </div>
-            
-                {% if  user.is_authenticated %}
-                    <div class=" dropdown d-flex justify-content-end">
-                        <a class="nav-link dropdown-toggle text-white"  role="button" data-bs-toggle="dropdown">
-                            Account
-                        </a> 
-                        <ul class="dropdown-menu"  style="background-color:#3a3939; " >
-                        
-                            {% if user.is_admin or user.is_staff %}
-                                <li><a class="dropdown-item text-white" href="{% url 'admin:index' %}">Admin panel</a></li>
-                            {% endif %} 
-                        
-                            <li><a class="dropdown-item text-white" href="{% url 'user:profile' %}">Profile</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                                <li><a class="dropdown-item text-white" href="{% url 'user:logout' %}">Log out</a></li>
-                        </ul>
-                    </div>
-                {% else %}
-                        <button class="log-in-btn" onclick="window.location.href='{% url 'user:login' %}'" >Log In</button>
-                {% endif %} 
+            <div class="container">
+{#                <div>#}
+{#                    <a href="{% url 'main:home' %}">#}
+{#                        <img src="{% static 'deps/images/logo.png' %}"  style="width: 46px;height: 46px" alt="logo">#}
+{#                        <a class="navbar-brand" href="{% url 'main:home' %}" >Crypto viewer</a>#}
+{#                    </a>#}
+{#                </div>#}
+{#                <div style="  text-align: center;">#}
+{#                    <a class="navbar-brand" href="{% url "coinList:index" %}">Coin List</a>#}
+{#                </div>#}
+{#            #}
+{#                {% if  user.is_authenticated %}#}
+{#                    <div class=" dropdown d-flex justify-content-end">#}
+{#                        <a class="nav-link dropdown-toggle text-white"  role="button" data-bs-toggle="dropdown" aria-expanded="true">#}
+{#                            Account#}
+{#                        </a> #}
+{#                        <ul class="dropdown-menu"  style="background-color:#3a3939; " >#}
+{#                        #}
+{#                            {% if user.is_admin or user.is_staff %}#}
+{#                                <li><a class="dropdown-item text-white" href="{% url 'admin:index' %}">Admin panel</a></li>#}
+{#                            {% endif %} #}
+{#                        #}
+{#                            <li><a class="dropdown-item text-white" href="{% url 'user:profile' %}">Profile</a></li>#}
+{#                            <li>#}
+{#                                <hr class="dropdown-divider">#}
+{#                            </li>#}
+{#                                <li><a class="dropdown-item text-white" href="{% url 'user:logout' %}">Log out</a></li>#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                {% else %}#}
+{#                        <button class="log-in-btn" onclick="window.location.href='{% url 'user:login' %}'" >Log In</button>#}
+{#                {% endif %} #}
+                <ul style="list-style: none; display: flex; flex-direction: row; justify-content: center; align-content: center; width: 100%">
+                    <li style="align-content: center;">
+                         <a href="{% url 'main:home' %}">
+                            <img src="{% static 'deps/images/logo.png' %}"  style="width: 46px;height: 46px" alt="logo">
+                        </a>
+                    </li>
+                    <li style="align-content: center; margin-right: 32px;font-size: 22px;">
+                        <a class="navbar-brand" href="{% url 'main:home' %}" >Crypto viewer</a>
+                    </li>
+                    <li style="align-content: center; margin-right: 32px; font-size: 22px;">
+                        <a class="navbar-brand" href="{% url "coinList:index" %}">Coin List</a>
+                    </li>
+                    <li style="align-content: center; right: 0; margin-left: auto;;font-size: 22px;">
+                        {% if  user.is_authenticated %}
+                            <div class=" dropdown d-flex justify-content-end">
+                                <a class="nav-link dropdown-toggle text-white"  role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                                    Account
+                                </a>
+                                <ul class="dropdown-menu"  style="background-color:#3a3939; " >
+
+                                    {% if user.is_admin or user.is_staff %}
+                                        <li><a class="dropdown-item text-white" href="{% url 'admin:index' %}">Admin panel</a></li>
+                                    {% endif %}
+
+                                    <li><a class="dropdown-item text-white" href="{% url 'user:profile' %}">Profile</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                        <li><a class="dropdown-item text-white" href="{% url 'user:logout' %}">Log out</a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                                <button class="log-in-btn" onclick="window.location.href='{% url 'user:login' %}'" >Log In</button>
+                        {% endif %}
+                    </li>
+                </ul>
             
             </div>
         </header>

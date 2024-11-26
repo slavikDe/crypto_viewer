@@ -1,10 +1,8 @@
-10.41.27
 
-       user : custom coin par
+convertor
 
-       pare :  saving as json
+додати гранулярність виводити всі дані які можу легко отримати гетом який кидається періодично
+отримувати всі дані для графіка
 
-find js framework for multithreading
-
-
-
+поки з сторінкою монети все, після додавання бірж зроблю тул для порівяння і подумаю що робити з ріалтайм графіками
+дані: changeUSDT changeCoin  max24h min24h volume24hCoin  volume24hUSDT
