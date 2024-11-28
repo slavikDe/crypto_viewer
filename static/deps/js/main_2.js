@@ -14,6 +14,7 @@ fetch('/coins/api/coins/')
     .then(data => {
         console.log("fetching api")
         all_symbols = data.coins;
+        console.warn("all_symbols: ", all_symbols);
         start(); // create params & open sockets
     })
     .catch(error => console.error("Error fetching coins: ", error));
@@ -88,7 +89,7 @@ function updateCoinInfo(symbol, newPrice, newVolume) {
     if (coinItem) {
             coinItem.querySelector('.coin.price').textContent = newPrice;
     } else {
-        console.log("Coin item not found for symbol: ", pureSymbol);
+        console.warn("Coin item not found for symbol: ", pureSymbol);
     }
     coinItem = coinItems.find(item => {
          const coinData = item.querySelector('.coin_item');

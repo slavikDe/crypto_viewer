@@ -59,7 +59,7 @@
                         </a>
                     </li>
                     <li style="align-content: center; margin-right: 32px;font-size: 22px;">
-                        <a class="navbar-brand" href="{% url 'main:home' %}" >Crypto viewer</a>
+                        <a class="navbar-brand" href="{% url 'main:home' %}" >Crypto Viewer</a>
                     </li>
                     <li style="align-content: center; margin-right: 32px; font-size: 22px;">
                         <a class="navbar-brand" href="{% url "coinList:index" %}">Coin List</a>
@@ -84,7 +84,7 @@
                                 </ul>
                             </div>
                         {% else %}
-                                <button class="log-in-btn" onclick="window.location.href='{% url 'user:login' %}'" >Log In</button>
+                                <button class="log-in-btn btn btn-outline-success text-white" onclick="window.location.href='{% url 'user:login' %}'" >Log In</button>
                         {% endif %}
                     </li>
                 </ul>

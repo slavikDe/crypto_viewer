@@ -14,30 +14,17 @@ ul {
     padding-left: 0;
 }
 .coin_info{
+    display: flex;
     margin-bottom: 8px;
-    width: 40vw;
     padding: 20px 12px 12px 12px;
     min-width: 550px;
+    justify-content: space-evenly;
 }
-.coin_name{
-    font-weight: bold;
-    font-size: 30px;
-    margin-right: 20px;
 
-}
-.coin-name-logo .market-info-item{
-    border-radius:50px;
-    height:50px;
-
-}
 .coin_logo{
     margin: 0 20px 0 20px;
-    width: 16px;
 }
-.coin_logo img{
-    max-width: 30px;
-    max-height: 30px;
-}
+
 .market-info{
     width: 100%;
     display: flex;
@@ -72,9 +59,7 @@ ul {
     flex-wrap: nowrap;
 }
 
-.market_info_green{
-    color: green;
-}
+
 .market_info_red{
     color: red;
 }
@@ -150,9 +135,7 @@ ul {
 .auth_tool{
     display: flex; align-items: center; justify-content: space-around; gap:10px
 }
-.coin-name-logo{
-    display: flex; align-items: center; justify-content: start;flex-direction: row ;
-}
+
 #coin_symbol{
     margin-bottom: 20px ;
 }
@@ -183,4 +166,123 @@ ul {
 }
 .custom-control.custom-radio:last-child label{
     margin-right: 0;
+}
+.coin-name-logo {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(145deg, #ffffff, #e0e0e0);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.5);
+    padding: 15px;
+    max-width: 350px;
+    gap: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 10px;
+}
+
+.coin-name-logo:hover {
+    transform: translateY(-5px); /* Легке підняття при наведенні */
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2), -6px -6px 12px rgba(255, 255, 255, 0.7); /* Інтенсивніша тінь */
+}
+
+.coin_logo img {
+    width: 50px; /* Розмір логотипу */
+    height: 100%; /* Розмір логотипу */
+    border-radius: 50%; /* Круглий логотип */
+    border: 2px solid rgba(0, 0, 0, 0.1); /* Легка рамка */
+    object-fit: cover; /* Адаптація зображення до контейнера */
+}
+
+.coin_name {
+    font-size: 18px; /* Розмір шрифту */
+    font-weight: bold; /* Жирний текст */
+    color: #333; /* Основний колір тексту */
+}
+
+.market_info_green {
+    font-size: 16px; /* Розмір шрифту ціни */
+    font-weight: bold; /* Жирний шрифт для ціни */
+    color: #28a745; /* Зелений колір */
+}
+
+
+
+
+
+
+.market-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Три колонки для трьох секцій */
+    gap: 20px; /* Відступ між секціями */
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef); /* Світлий градієнт */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Легка рамка */
+    border-radius: 12px; /* Закруглені кути */
+    padding: 20px; /* Внутрішні відступи */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.5); /* Неоморфічний ефект */
+}
+
+.market_container {
+    display: flex;
+    flex-direction: column; /* Розташування елементів вертикально */
+    align-items: flex-start; /* Вирівнювання по лівому краю */
+    gap: 10px; /* Відступ між елементами */
+}
+
+.market-info-item {
+    font-size: 16px; /* Розмір тексту */
+    padding: 5px 10px; /* Відступи всередині */
+    border-radius: 8px; /* Закруглені кути */
+    background: rgba(255, 255, 255, 0.8); /* Легкий фон */
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Тінь для виділення */
+}
+
+.market-info-item b {
+    color: #495057; /* Темний відтінок для заголовків */
+    font-size: 18px; /* Трохи більший текст */
+}
+
+.market-info-item.positive {
+    color: #28a745; /* Зелений для позитивних значень */
+    font-weight: bold; /* Жирний текст */
+}
+
+.market-info-item.negative {
+    color: #dc3545; /* Червоний для негативних значень */
+    font-weight: bold; /* Жирний текст */
+}
+
+/* Min/Max секція */
+.market_container:nth-child(2) .market-info-item:nth-child(2) {
+    color: #dc3545; /* Червоний колір для Min */
+    font-weight: bold; /* Жирний текст */
+}
+
+.market_container:nth-child(2) .market-info-item:nth-child(3) {
+    color: #28a745; /* Зелений колір для Max */
+    font-weight: bold; /* Жирний текст */
+}
+
+/* Volume секція */
+.market_container:nth-child(3) .market-info-item {
+    color: #000; /* Чорний текст для Volume */
+    font-weight: bold; /* Жирний текст */
+}
+
+/* Загальні стилі для всіх елементів */
+.market-info-item {
+    font-size: 16px; /* Розмір тексту */
+    padding: 5px 10px; /* Відступи */
+    background: rgba(255, 255, 255, 0.9); /* Світлий фон */
+    border-radius: 8px; /* Закруглені кути */
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Тінь */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Анімація */
+}
+
+.market-info-item:hover {
+    transform: translateY(-3px); /* Легкий підйом при наведенні */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* Інтенсивніша тінь */
+}
+.coin_logo {
+    height: 100%;
 }

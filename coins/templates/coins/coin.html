@@ -16,35 +16,31 @@
 {% block content %}
 	<div class="row">
         <div class="coin_info">
-            <div class="coin-name-logo">
-               {% if coin.image %}
-                    <div class="coin_logo"><img src="{{ coin.image.url }}" alt="coin_logo"></div>
-                    {% else %}
-                    <div class="coin_logo"><img src="{% static 'deps/images/Not found image.png' %}" alt="coin_logo"></div>
-               {% endif %}
-               {% if coin.name %}
-                    <div class="coin_name"> {{ coin.name }}</div>
-               {% endif %}
-{#               {% if coin.symbol %}#}
-{#                   <div id="coin_symbol">{{ coin.symbol }}</div>#}
-{#               {% endif %}#}
-               <div class="market-info-item">Price: $<span class="market_info_green">{{ coin_info.openPrice }}</span></div>
-
-            </div>
+            <div>
+                <div class="coin-name-logo">
+                    <div class="coin_logo">
+                         {% if coin.image %}
+                            <img src="/{{ coin.image }}" alt="coin_logo">
+                        {% else %}
+                            <img src="{% static 'deps/images/Not found image.png' %}" alt="coin_logo">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div class="coin_name">{{ coin.name|capfirst }}</div>
+                        <div>Price: $<span class="market_info_green">{{ coin_info.openPrice }}</span></div>
+                    </div>
+                </div>
 
             <div class="market-info">
-
                 <div class="market_container">
                     <div class="market-info-item"><b>Change</b></div>
-                    {% if  coin_info.priceChange > 0 %}
+                    {% if '-' not in coin_info.priceChangePercent %}
                         <div class="market-info-item positive">{{ coin_info.priceChange }} (USDT)</div>
                         <div class="market-info-item positive">{{ coin_info.priceChangePercent }} (%)</div>
-
                     {% else %}
                         <div class="market-info-item negative">{{ coin_info.priceChange }} (USDT)</div>
                         <div class="market-info-item negative">{{ coin_info.priceChangePercent }} (%)</div>
                     {% endif %}
-
                 </div>
                 <div class="market_container">
                     <div class="market-info-item"><b>Min/Max</b></div>
@@ -53,11 +49,52 @@
                 </div>
                 <div class="market_container">
                     <div class="market-info-item"><b>Volume</b></div>
-                    <div class="market-info-item">{{ coin_info.volume }} ({{ coin.symbol}})</div>
+                    <div class="market-info-item">{{ coin_info.volume }} ({{ coin.symbol }})</div>
                     <div class="market-info-item">{{ coin_info.quoteVolume }} (USDT)</div>
                 </div>
             </div>
 
+            </div>
+
+
+
+            <div class="coin-edit">
+                <!-- Coin manipulation -->
+                <!-- Кнопка для відкриття модального вікна -->
+                <button id="openModalBtn" class="btn btn-outline-success text-white">+ Add Custom Coin</button>
+
+{#                <!-- Модальне вікно -->#}
+{#                <!-- Add coin -->#}
+{#                <div id="customCoinModal" class="modal">#}
+{#                    <div class="modal-content">#}
+{#                        <span class="close-btn" id="closeModalBtn">&times;</span>#}
+{#                        <form id="customCoinForm">#}
+{#                            <div class="row" style="display: flex; flex-direction: column; justify-content: center; margin: 0 auto">#}
+{#                                <div>#}
+{#                                    <select id="coin-market" name="market" class="form-select" required>#}
+{#                                        <option value="" disabled selected>Select market</option>#}
+{#                                        <option value="MEXC">MEXC</option>#}
+{#                                        <option value="BINANCE">BINANCE</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                                <div >#}
+{#                                    <input type="text" class="add_coin_input" id="symbol" name="symbol" placeholder="Enter symbol" required>#}
+{#                                    <span class="tooltip-icon" title="The unique symbol used to search for the coin's data.">ⓘ</span>#}
+{##}
+{#                                </div>#}
+{#                                <div >#}
+{#                                    <input type="text" class="add_coin_input"  id="coin-name" name="coin-name" placeholder="Enter coin name" required >#}
+{#                                    <span class="tooltip-icon" title="If you skip this field, the name will be replaced by the symbol.">ⓘ</span>#}
+{#                                </div>#}
+{#                            </div>#}
+{##}
+{#                            <button type="button" id="testButton" class="btn btn-primary">Test</button>#}
+{#                            <button type="button" id="addButton" class="btn btn-success" disabled>Add</button>#}
+{#                            <p id="statusMessage" style="display: none;"></p>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
         </div>
 
         <div class="graphics"  >

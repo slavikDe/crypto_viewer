@@ -6,18 +6,57 @@
 <div class="content">
 
     <!-- Start filtering -->
-    <div class="filter" style="justify-content: space-evenly;">
+    <div class="filter" style="justify-content: space-between;">
         <!-- Search -->
         <form action="{% url 'coinList:search' %}" method="get" class="d-flex" role="search">
             <input class="form-control me-2" type="search" id="coin-search" name="q" placeholder="Search coin by name..." aria-label="Search">
             <button class="btn btn-outline-success text-white" type="submit">Search</button>
         </form>
+
+        <!-- Coin manipulation -->
+        <!-- Кнопка для відкриття модального вікна -->
+        <button id="openModalBtn" class="btn btn-outline-success text-white">+ Add Custom Coin</button>
+        <button id="openModalBtnAdmin" class="btn btn-outline-success text-white">+ Add Admin Coin</button>
+
+        <!-- Модальне вікно -->
+        <!-- Add coin -->
+        <div id="customCoinModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="closeModalBtn">&times;</span>
+                <form id="customCoinForm">
+                    <div class="row" style="display: flex; flex-direction: column; justify-content: center; margin: 0 auto">
+                        <div>
+                            <select id="coin-market" name="market" class="form-select" required>
+                                <option value="" disabled selected>Select market</option>
+                                <option value="MEXC">MEXC</option>
+                                <option value="BINANCE">BINANCE</option>
+                            </select>
+                        </div>
+                        <div >
+                            <input type="text" class="add_coin_input" id="symbol" name="symbol" placeholder="Enter symbol" required>
+                            <span class="tooltip-icon" title="The unique symbol used to search for the coin's data.">ⓘ</span>
+
+                        </div>
+                        <div >
+                            <input type="text" class="add_coin_input"  id="coin-name" name="coin-name" placeholder="Enter coin name" required >
+                            <span class="tooltip-icon" title="If you skip this field, the name will be replaced by the symbol.">ⓘ</span>
+                        </div>
+                    </div>
+
+                    <button type="button" id="testButton" class="btn btn-primary">Test</button>
+                    <button type="button" id="addButton" class="btn btn-success" disabled>Add</button>
+                    <p id="statusMessage" style="display: none;"></p>
+                </form>
+            </div>
+        </div>
+
     </div>
     <!-- End filtering -->
 
     <div class="crypto-list">
         <!-- header start -->
         <div class="list_header">
+            <div class="list_header_item">№</div>
             <div class="list_header_item" style="flex: 3">Name</div>
             <div class="list_header_item" style="flex: 2">
                 <div  style="cursor: pointer">Price <span onclick="toggleSortOrder()">&#x25b4;&#x25be;</span></div>
@@ -32,13 +71,19 @@
             {% for coin in coins %}
             <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' coin_slug=coin.slug %}'">
                 <div class="coin_item" data-symbol="{{ coin.symbol }}">
+                    <div class="coin index">{{ forloop.counter }}</div>
                     <div class="coin name">
                         {% if coin.image %}
-                        <img src="{{ coin.image.url }}" alt="logo" class="coin_logo">
+                            <img src="/{{ coin.image }}" alt="logo" class="coin_logo">
+{#                            <img src="/{{ coin.image }}" alt="logo" class="coin_logo">#}
                         {% else %}
-                        <img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">
+                            <img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">
                         {% endif %}
-                        <span class="coin_symbol">{{ coin.symbol }}</span>
+                        <span class="coin_symbol">{{ coin.symbol|upper }}</span>
+                        {% if coin.isCustom %}
+                            <span>Custom</span>
+                        {% endif %}
+
                     </div>
                     <div class="coin price">{{ coin.price }}</div>
                     <div class="coin volume">{{ coin.volume }}</div>
@@ -56,34 +101,34 @@
          <!-- content coin end -->
     </div>
 
-    <!-- Pagination -->
-    <nav aria-label="Page navigation example">
-        {% if coins.paginator.num_pages > 1 %}
-        <ul class="pagination justify-content-center custom-shadow d-flex">
-            <li class="page-item {% if not coins.has_previous %}disabled{% endif %}">
-                <a class="page-link" href="?page=1">&laquo; First</a>
-            </li>
-            <li class="page-item {% if not coins.has_previous %}disabled{% endif %}">
-                <a class="page-link" href="{% if coins.has_previous %}?{% change_params page=coins.previous_page_number %}{% else %}# {% endif %}">Previous</a>
-            </li>
-
-            {% for page in coins.paginator.page_range %}
-            {% if page >= coins.number|add:-2 and page <= coins.number|add:2 %}
-            <li class="page-item {% if coins.number == page %} active {% endif %}">
-                <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-
-            <li class="page-item {% if not coins.has_next %}disabled{% endif %}">
-                <a class="page-link" href="{% if coins.has_next %}?{% change_params page=coins.next_page_number %}{% else %}# {% endif %}">Next</a>
-            </li>
-            <li class="page-item {% if not coins.has_next %}disabled{% endif %}">
-                <a class="page-link" href="?page={{ coins.paginator.num_pages }}">Last &raquo;</a>
-            </li>
-        </ul>
-        {% endif %}
-    </nav>
+{#    <!-- Pagination -->#}
+{#    <nav aria-label="Page navigation example">#}
+{#        {% if coins.paginator.num_pages > 1 %}#}
+{#        <ul class="pagination justify-content-center custom-shadow d-flex">#}
+{#            <li class="page-item {% if not coins.has_previous %}disabled{% endif %}">#}
+{#                <a class="page-link" href="?page=1">&laquo; First</a>#}
+{#            </li>#}
+{#            <li class="page-item {% if not coins.has_previous %}disabled{% endif %}">#}
+{#                <a class="page-link" href="{% if coins.has_previous %}?{% change_params page=coins.previous_page_number %}{% else %}# {% endif %}">Previous</a>#}
+{#            </li>#}
+{##}
+{#            {% for page in coins.paginator.page_range %}#}
+{#            {% if page >= coins.number|add:-2 and page <= coins.number|add:2 %}#}
+{#            <li class="page-item {% if coins.number == page %} active {% endif %}">#}
+{#                <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>#}
+{#            </li>#}
+{#            {% endif %}#}
+{#            {% endfor %}#}
+{##}
+{#            <li class="page-item {% if not coins.has_next %}disabled{% endif %}">#}
+{#                <a class="page-link" href="{% if coins.has_next %}?{% change_params page=coins.next_page_number %}{% else %}# {% endif %}">Next</a>#}
+{#            </li>#}
+{#            <li class="page-item {% if not coins.has_next %}disabled{% endif %}">#}
+{#                <a class="page-link" href="?page={{ coins.paginator.num_pages }}">Last &raquo;</a>#}
+{#            </li>#}
+{#        </ul>#}
+{#        {% endif %}#}
+{#    </nav>#}
 </div>
 {% endblock %}
 
@@ -95,8 +140,9 @@
 {#{% endblock %}#}
 
 {% block scripts %}
-
     <script src="{% static 'deps/js/main_2.js' %}"></script>
     <script src="{% static 'deps/js/sorting.js' %}"></script>
+    <script src="{% static 'deps/js/coins_interaction.js' %}"></script>
+
 
 {% endblock %}
