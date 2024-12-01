@@ -241,6 +241,7 @@ button[type="submit"] {
     padding: 24px;
     justify-content: center;
     margin: 20vh auto 0 auto;
+    max-width: 400px;
 }
 
 .close-btn {
@@ -258,9 +259,7 @@ button[type="submit"] {
     width: 100px !important;
 
 }
-.modal-content{
-    max-width: 400px;
-}
+
 .add_coin_input{
     width: 80%;
     max-width: 200px;
@@ -286,12 +285,14 @@ button[type="submit"] {
     height: 45px ;
 }
 
-#openModalBtn, .log-in-btn, #openModalBtnAdmin{
+#openModalBtn, .log-in-btn, #openModalBtnAdmin, #editCustomCoinBtn{
     background-color: #007BFF !important;
     width: 175px;
     height: 45px ;
+    color: white;
 }
-#openModalBtn:hover, .log-in-btn:hover, #openModalBtnAdmin:hover{
+#openModalBtn:hover, .log-in-btn:hover, #openModalBtnAdmin:hover,
+#editCustomCoinBtn:hover{
     color: var(--bs-btn-hover-color) !important;
     background-color: var(--bs-btn-hover-bg) !important;
     border-color: var(--bs-btn-hover-border-color) !important;

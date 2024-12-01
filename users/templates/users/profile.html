@@ -25,8 +25,8 @@
                                 <input type="file" class="form-control mt-3" id="id_image"
                                        name="image"
                                        accept="image/*">
-                                {% if form.image.errors %}
-                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.image.errors }}</div>
+                                {% if form.image.error %}
+                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.image.error }}</div>
                                 {% endif %} 
                             </div>
                             <div class="col-md-12 mb-3">
@@ -37,7 +37,7 @@
                                        value="{{ form.first_name.value }}"
                                        required>
                                 {% if form.first_name.error %}
-                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.first_name.errors }}</div>
+                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.first_name.error }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-12 mb-3">
@@ -48,7 +48,7 @@
                                        value="{{ form.last_name.value }}"
                                        required>
                                 {% if form.last_name.error %}
-                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.last_name.errors }}</div>
+                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.last_name.error }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-12 mb-3">
@@ -59,7 +59,7 @@
                                        name="username"
                                        required>
                                 {% if form.username.error %}
-                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.username.errors }}</div>
+                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.username.error }}</div>
                                 {% endif %}
                             </div>
                             <div class="col-md-12 mb-3">
@@ -70,7 +70,7 @@
                                        name="email"
                                        required>
                                 {% if form.email.error %}
-                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.email.errors }}</div>
+                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.email.error }}</div>
                                 {% endif %}
                             </div>
                         </div>

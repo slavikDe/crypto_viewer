@@ -31,136 +31,121 @@
                     </div>
                 </div>
 
-            <div class="market-info">
-                <div class="market_container">
-                    <div class="market-info-item"><b>Change</b></div>
-                    {% if '-' not in coin_info.priceChangePercent %}
-                        <div class="market-info-item positive">{{ coin_info.priceChange }} (USDT)</div>
-                        <div class="market-info-item positive">{{ coin_info.priceChangePercent }} (%)</div>
-                    {% else %}
-                        <div class="market-info-item negative">{{ coin_info.priceChange }} (USDT)</div>
-                        <div class="market-info-item negative">{{ coin_info.priceChangePercent }} (%)</div>
-                    {% endif %}
-                </div>
-                <div class="market_container">
-                    <div class="market-info-item"><b>Min/Max</b></div>
-                    <div class="market-info-item">{{ coin_info.highPrice }}</div>
-                    <div class="market-info-item">{{ coin_info.lowPrice }}</div>
-                </div>
-                <div class="market_container">
-                    <div class="market-info-item"><b>Volume</b></div>
-                    <div class="market-info-item">{{ coin_info.volume }} ({{ coin.symbol }})</div>
-                    <div class="market-info-item">{{ coin_info.quoteVolume }} (USDT)</div>
+                <div class="market-info">
+                    <div class="market_container">
+                        <div class="market-info-item"><b>Change</b></div>
+                        {% if '-' not in coin_info.priceChangePercent %}
+                            <div class="market-info-item positive">{{ coin_info.priceChange }} (USDT)</div>
+                            <div class="market-info-item positive">{{ coin_info.priceChangePercent }} (%)</div>
+                        {% else %}
+                            <div class="market-info-item negative">{{ coin_info.priceChange }} (USDT)</div>
+                            <div class="market-info-item negative">{{ coin_info.priceChangePercent }} (%)</div>
+                        {% endif %}
+                    </div>
+                    <div class="market_container">
+                        <div class="market-info-item"><b>Min/Max</b></div>
+                        <div class="market-info-item">{{ coin_info.highPrice }}</div>
+                        <div class="market-info-item">{{ coin_info.lowPrice }}</div>
+                    </div>
+                    <div class="market_container">
+                        <div class="market-info-item"><b>Volume</b></div>
+                        <div class="market-info-item">{{ coin_info.volume }} ({{ coin.symbol }})</div>
+                        <div class="market-info-item">{{ coin_info.quoteVolume }} (USDT)</div>
+                    </div>
                 </div>
             </div>
-
-            </div>
-
-
 
             <div class="coin-edit">
-                <!-- Coin manipulation -->
-                <!-- Кнопка для відкриття модального вікна -->
-                <button id="openModalBtn" class="btn btn-outline-success text-white">+ Add Custom Coin</button>
+                <div class="coin-actions">
+                    {% if is_custom %}
+                        <!-- Actions for custom coins -->
+                        <p>This is a custom coin.</p>
+                        <button id="editCustomCoinBtn" class="btn btn-outline-success text-white">Edit Custom Coin</button>
+                    {% else %} {# default coin only for admin
+                        <!-- Actions for default coins -->
+                        <p>This is a default coin.</p>
+                        {% if is_admin_user %}
+                            <button id="editDefaultCoinBtn" class="btn btn-outline-success text-white">Edit Default Coin</button>
+                        {% else %}
+                            <p>You cannot edit this coin.</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
 
-{#                <!-- Модальне вікно -->#}
-{#                <!-- Add coin -->#}
-{#                <div id="customCoinModal" class="modal">#}
-{#                    <div class="modal-content">#}
-{#                        <span class="close-btn" id="closeModalBtn">&times;</span>#}
-{#                        <form id="customCoinForm">#}
-{#                            <div class="row" style="display: flex; flex-direction: column; justify-content: center; margin: 0 auto">#}
-{#                                <div>#}
-{#                                    <select id="coin-market" name="market" class="form-select" required>#}
-{#                                        <option value="" disabled selected>Select market</option>#}
-{#                                        <option value="MEXC">MEXC</option>#}
-{#                                        <option value="BINANCE">BINANCE</option>#}
-{#                                    </select>#}
-{#                                </div>#}
-{#                                <div >#}
-{#                                    <input type="text" class="add_coin_input" id="symbol" name="symbol" placeholder="Enter symbol" required>#}
-{#                                    <span class="tooltip-icon" title="The unique symbol used to search for the coin's data.">ⓘ</span>#}
-{##}
-{#                                </div>#}
-{#                                <div >#}
-{#                                    <input type="text" class="add_coin_input"  id="coin-name" name="coin-name" placeholder="Enter coin name" required >#}
-{#                                    <span class="tooltip-icon" title="If you skip this field, the name will be replaced by the symbol.">ⓘ</span>#}
-{#                                </div>#}
-{#                            </div>#}
-{##}
-{#                            <button type="button" id="testButton" class="btn btn-primary">Test</button>#}
-{#                            <button type="button" id="addButton" class="btn btn-success" disabled>Add</button>#}
-{#                            <p id="statusMessage" style="display: none;"></p>#}
-{#                        </form>#}
-{#                    </div>#}
-{#                </div>#}
+{#        <button id="openModalBtn" class="btn btn-outline-success text-white">Edit Coin</button>#}
+        <!-- Add coin -->
+        <div id="customCoinModal" class="modal">
+            <div class="modal-edit">
+                <div class="coin-modal-header-container">
+                   <h3 class="text-center mb-4 coin-modal-header">Coin details</h3>
+                   <span class="close-btn" id="closeModalBtn">&times;</span>
+                </div>
+                <form id="customCoinForm"  method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row" style="display: flex; flex-direction: column; justify-content: center; margin: 0 auto">
+                        <div style="text-align: center">
+                            {% if coin.image %}
+                                <img src="/{{ coin.image }}" alt="coin_image" class="img-fluid rounded-circle mb-1" id="image" style="max-width: 128px;">
+                            {% else %}
+                                <img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="img-fluid rounded-circle mb-1" id="image" style="max-width: 128px;">
+                            {% endif %}
+                            <input type="file" class="form-control" name="image" accept="image/*">
+
+                            {% if form.image.errors %}
+                                <div class="alert alert-danger alert-dismissible fade show">{{ form.image.error }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="symbol" class="form-label">Symbol</label>
+                            <input type="text" class="form-control" id="symbol"
+                                name="symbol"
+                                value="{{ coin.symbol }}" disabled>
+                            {# hidden fields for backend #}
+                            <input type="hidden" id="symbol" name="symbol" value="{{ coin.symbol }}">
+                            {% if form.symbol.error %}
+                                <div class="alert alert-danger alert-dismissible fade show">{{ form.symbol.error }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name"
+                                name="name"
+                                value="{{ coin.name }}"
+                                placeholder="Ender new coin name">
+                            {% if form.name.error %}
+                                <div class="alert alert-danger alert-dismissible fade show">{{ form.name.error }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                           <div>
+                                <label for="is_custom" class="form-label">Custom Coin</label>
+                                <input type="radio" id="is_custom" name="is_custom" {% if coin.is_custom %}checked{% endif %} disabled>
+                           </div>
+                            <div>
+                                <label for="is_default" class="form-label">Default Coin</label>
+                                <input type="radio" id="is_default" name="is_custom" {% if not coin.is_custom %}checked{% endif %} disabled>
+                            </div>
+                            {# hidden field for send data to backend #}
+                            <input type="hidden" name="is_custom" value="{% if coin.is_custom %}true{% else %}false{% endif %}">
+                        </div>
+                    </div>
+
+                   <div class="d-flex justify-content-evenly mt-3">
+                        <button type="button" id="applyChanges" class="btn btn-outline-primary">
+                            <i class="fas fa-check-circle"></i> Apply
+                        </button>
+                        <button type="submit" id="deleteCoin" class="btn btn-outline-danger">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </div>
+                    <p id="statusMessage" style="display: none;text-align: center"></p>
+                </form>
+            </div>
+            </div>
             </div>
         </div>
 
         <div class="graphics"  >
-        {#               <div class="order-book">#}
-        {#                   <div class="header">#}
-        {#                       <ul>#}
-        {#                           <li>Price (USDT)</li>#}
-        {#                           <li>Amount (Coin)</li>#}
-        {#                           <li>Total (USDT)</li>#}
-        {#                       </ul>#}
-        {#                   </div>#}
-        {##}
-        {#                   <div class="order-book-item">#}
-        {##}
-        {#                       <div class="ask">#}
-        {#                           <ul >#}
-        {#                               <li>Price ask </li>#}
-        {#                               <li>Amount ask </li>#}
-        {#                               <li>Total ask </li>#}
-        {#                           </ul>#}
-        {#                       </div>#}
-        {##}
-        {#                       <div class="ask">#}
-        {#                           <ul >#}
-        {#                               <li>Price ask </li>#}
-        {#                               <li>Amount ask </li>#}
-        {#                               <li>Total ask </li>#}
-        {#                           </ul>#}
-        {#                       </div>#}
-        {##}
-        {#                       <div class="ask">#}
-        {#                           <ul >#}
-        {#                               <li>Price ask </li>#}
-        {#                               <li>Amount ask </li>#}
-        {#                               <li>Total ask </li>#}
-        {#                           </ul>#}
-        {#                       </div>#}
-        {#                   </div>#}
-        {##}
-        {#                   <div class="order-book-item">#}
-        {##}
-        {#                       <div class="bid">#}
-        {#                           <ul >#}
-        {#                               <li>Price bid </li>#}
-        {#                               <li>Amount bid </li>#}
-        {#                               <li>Total bid </li>#}
-        {#                           </ul>#}
-        {#                       </div>#}
-        {##}
-        {#                       <div class="bid">#}
-        {#                           <ul >#}
-        {#                               <li>Price bid </li>#}
-        {#                               <li>Amount bid </li>#}
-        {#                               <li>Total bid </li>#}
-        {#                           </ul>#}
-        {#                       </div>#}
-        {##}
-        {#                       <div class="bid">#}
-        {#                           <ul >#}
-        {#                               <li>Price bid </li>#}
-        {#                               <li>Amount bid </li>#}
-        {#                               <li>Total bid </li>#}
-        {#                           </ul>#}
-        {#                       </div>#}
-        {#                   </div>#}
-        {#               </div>#}
 
             {# Interval from for global chart. Using js  #}
             <form id="radio-form">
@@ -198,10 +183,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
     <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>
+
     <script src="{% static 'deps/js/chartjs-chart-financial.min.js' %}" type="text/javascript"></script>
 
     <script src="{% static 'deps/js/coin.js' %}"></script>
-
-
 {% endblock %}
 

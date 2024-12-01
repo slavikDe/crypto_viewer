@@ -16,7 +16,7 @@
                                        value="{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}"
                                        name="first_name"
                                        placeholder="Enter your name" required>
-                                {% if form.first_name.errors %}
+                                {% if form.first_name.error %}
                                     <div class="alert alert-danger alert-dismissible fade show">{{ form.first_name.error }}</div>
                                 {% endif %}
                             </div>
@@ -26,7 +26,7 @@
                                        value="{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}"
                                        name="last_name"
                                        placeholder="Enter your surname" required>
-                             {% if form.last_name.errors %}
+                             {% if form.last_name.error %}
                                     <div class="alert alert-danger alert-dismissible fade show">{{ form.last_name.error }}</div>
                                 {% endif %}
                             </div>
@@ -36,7 +36,7 @@
                                        value="{% if form.username.value %}{{ form.username.value }}{% endif %}"
                                        name="username"
                                        placeholder="Enter your username" required>
-                             {% if form.username.errors %}
+                             {% if form.username.error %}
                                     <div class="alert alert-danger alert-dismissible fade show">{{ form.username.error }}</div>
                                 {% endif %}
                             </div>
@@ -46,7 +46,7 @@
                                        value="{% if form.email.value %}{{ form.email.value }}{% endif %}"
                                        name="email"
                                        placeholder="Enter your email" required>
-                             {% if form.email.errors %}
+                             {% if form.email.error %}
                                     <div class="alert alert-danger alert-dismissible fade show">{{ form.email.error }}</div>
                                 {% endif %}
                             </div>
@@ -56,7 +56,7 @@
                                        value="{% if form.password1.value %}{{ form.password1.value }}{% endif %}"
                                        name="password1"
                                        placeholder="Enter your password" required>
-                                 {% if form.password1.errors %}
+                                 {% if form.password1.error %}
                                     <div class="alert alert-danger alert-dismissible fade show">{{ form.password1.error }}</div>
                                 {% endif %}
                             </div>
@@ -66,7 +66,7 @@
                                        value="{% if form.password2.value %}{{ form.password2.value }}{% endif %}"
                                        name="password2"
                                        placeholder="Confirm password" required>
-                                 {% if form.password2.errors %}
+                                 {% if form.password2.error %}
                                     <div class="alert alert-danger alert-dismissible fade show">{{ form.password2.error }}</div>
                                 {% endif %}
                             </div>

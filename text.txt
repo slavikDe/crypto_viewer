@@ -6,3 +6,6 @@ convertor
 
 поки з сторінкою монети все, після додавання бірж зроблю тул для порівяння і подумаю що робити з ріалтайм графіками
 дані: changeUSDT changeCoin  max24h min24h volume24hCoin  volume24hUSDT
+
+
+
