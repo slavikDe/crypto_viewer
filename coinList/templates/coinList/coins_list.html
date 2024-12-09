@@ -64,7 +64,6 @@
                 </form>
             </div>
         </div>
-
     </div>
     <!-- End filtering -->
 
@@ -87,6 +86,12 @@
             {% for coin in coins %}
             <div class="coin_item_wrapper" onclick="window.location.href=`{% url 'coins:coin' coin_slug=coin.slug  %}?exchange=${exchange}`">
                 <div class="coin_item" data-symbol="{{ coin.symbol }}">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    <button class="favorite-btn" data-coin-id="{{ coin.symbol }}">
+                        <span class="{% if coin.symbol in request.user.favorite_coins_id %}favorited{% else %}not-favorited{% endif %}">
+                            ★
+                        </span>
+                    </button>
                     <div class="coin index">{{ forloop.counter }}</div>
                     <div class="coin name">
                         {% if coin.image %}

@@ -91,13 +91,13 @@
             
             </div>
         </header>
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+{#        {% if messages %}#}
+{#            {% for message in messages %}#}
+{#                <div class="alert alert-{{ message.tags }}">#}
+{#                    {{ message }}#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        {% endif %}#}`
         {% include  "includes/notifications.html" %}
         {% block content %}
         {% endblock %}

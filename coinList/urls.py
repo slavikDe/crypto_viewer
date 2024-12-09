@@ -12,5 +12,6 @@ urlpatterns = [
     path('add-custom-coin/', views.add_custom_coin, name='add_coin'),
     path('add-default-coin/', views.add_default_coin, name='add_coin'),
     path('test-coin/', views.test_coin, name='test_coin'),
+    path('toggle-favorite-coin/', views.toggle_favorite_coin, name='toggle_favorite_coin'),
 
 ]

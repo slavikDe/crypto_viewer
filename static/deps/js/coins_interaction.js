@@ -7,30 +7,39 @@ const addButton = document.getElementById('addButton');
 const statusMessage = document.getElementById('statusMessage');
 let isAdminUser = false;
 
-// openModalButton.addEventListener('click', function () {
-//     modal.style.display = 'block';
-// });
+console.log("testButton:", testButton);
+console.log("addButton:", addButton) ;
 
-openModalButtonAdmin.addEventListener('click', function () {
-    modal.style.display = 'block';
-    isAdminUser = true;
-})
+if(openModalButton){
+    openModalButton.addEventListener('click', function () {
+        modal.style.display = 'block';
+    });
+}
+
+if(openModalButtonAdmin){
+    openModalButtonAdmin.addEventListener('click', function () {
+        modal.style.display = 'block';
+        isAdminUser = true;
+    });
+}
 
 closeModalButton.addEventListener('click', function () {
     modal.style.display = 'none';
     isAdminUser = false;
     resetForm();
+    console.log("closeModalButton")
 });
 
 window.addEventListener('click', function (event) {
     if (event.target === modal) {
         modal.style.display = 'none';
-
         resetForm();
     }
+    console.log("window close")
 });
 
 testButton.addEventListener('click', function () {
+    console.log("testButton click")
     console.log('isSuperUser: ', isAdminUser)
     const market = document.getElementById('exchange-selector').value;
 
@@ -72,6 +81,7 @@ testButton.addEventListener('click', function () {
 });
 
 addButton.addEventListener('click', function () {
+    console.log("addbutton")
 
     const market = addButton.dataset.market;
     const symbol = addButton.dataset.symbol;
@@ -124,6 +134,8 @@ function resetForm() {
     document.getElementById('coin-name').value = '';
     addButton.disabled = true;
     statusMessage.style.display = 'none';
+    console.log("reset")
+
 }
 
 // CSRF-token

@@ -12,18 +12,123 @@ from django.views.decorators.csrf import csrf_exempt
 from coins.models import Coins, Market
 from main.utils import q_search
 
+# def coin_list(request):
+#
+#     exchange = request.GET.get('exchange')
+#
+#     # Search
+#     query = request.GET.get('q', None)
+#
+#     # API for market data
+#     MEXC_base_url = 'https://api.mexc.com'
+#     endpoint = '/api/v3/ticker/24hr'
+#
+#     # Fetch market data
+#     coins_changes = [{
+#         'symbol': coin['symbol'][:-4].lower(),
+#         'change': round(float(coin['priceChangePercent']), 3),
+#         'price': round(float(coin['prevClosePrice']), 3),
+#         'volume': round(float(coin['volume']), 3),
+#     } for coin in make_request(MEXC_base_url + endpoint)]
+#
+#     coins_changes_dict = {coin['symbol']: coin for coin in coins_changes}
+#
+#     # Add custom coins for the current user
+#     user = request.user
+#     custom_coins = []
+#
+#     if user.is_authenticated and user.user_custom_pair:
+#         custom_coins = json.loads(user.user_custom_pair)
+#
+#     # Add custom coins field `isCustom` = True
+#     for coin in custom_coins:
+#         coin['isCustom'] = True
+#         # coin['image'] = coin.image
+#         # coin['image'] = f"custom_coins/coinLogo_/{coin['symbol']}.png"  # Correct image path for custom coins
+#
+#     # Fetch default coins
+#     if query:
+#         # Search default coins
+#         default_coins = [
+#             {
+#                 'id': coin.id,
+#                 'symbol': coin.symbol,
+#                 'slug': coin.slug,
+#                 'name': coin.name,
+#                 'image': coin.image.url[7:] if coin.image else None,
+#                 'isCustom': False,  # Default coins are not custom
+#             } for coin in q_search(query)
+#         ]
+#
+#         # Search within custom coins
+#         if custom_coins:
+#             custom_coins = [
+#                 coin for coin in custom_coins if query.lower() in coin['symbol'].lower() or query.lower() in coin['name'].lower()
+#             ]
+#     else:
+#         # Get all default coins
+#         default_coins = [
+#             {
+#                 'id': coin.id,
+#                 'symbol': coin.symbol,
+#                 'slug': coin.slug,
+#                 'name': coin.name,
+#                 'image': coin.image.url[7:] if coin.image else None,
+#                 'isCustom': False,  # Default coins are not custom
+#             } for coin in Coins.objects.order_by('id')
+#         ]
+#
+#     # Combine custom coins with default coins (custom coins come first)
+#     coins_ = custom_coins + default_coins
+#
+#     # Enrich data with API data
+#     coins = []
+#     for coin in coins_:
+#         symbol_key = coin['symbol'].lower()  # Normalize case for API lookup
+#         change_data = coins_changes_dict.get(symbol_key, None)
+#
+#         coin_data = {
+#             'id': coin.get('id', None),  # ID may be missing for custom coins
+#             'symbol': coin['symbol'],
+#             'slug': coin.get('slug', ''),  # Custom coins may not have a slug
+#             'name': coin['name'],
+#             'image': coin['image'],
+#             'isCustom': coin.get('isCustom', False),  # True for custom coins, False for default coins
+#             'change': change_data['change'] if change_data else 0,
+#             'price': change_data['price'] if change_data else 0,
+#             'volume': change_data['volume'] if change_data else 0,
+#         }
+#         coins.append(coin_data)
+#
+#     # Context for template rendering
+#     context = {
+#         'title': 'Coins',
+#         'coins': coins,
+#         'exchange': exchange,
+#     }
+#
+#     return render(request, 'coinList/coins_list.html', context)
+
 def coin_list(request):
+    user = request.user
+
+    if user.is_authenticated and user.favorite_coins_id:
+        if isinstance(user.favorite_coins_id, str):
+            favorite_coins = json.loads(user.favorite_coins_id)
+        else:
+            favorite_coins = user.favorite_coins_id
+    else:
+        favorite_coins = []
+
+    print("Favorite coins:", favorite_coins)
 
     exchange = request.GET.get('exchange')
 
-    # Search
     query = request.GET.get('q', None)
 
-    # API for market data
     MEXC_base_url = 'https://api.mexc.com'
     endpoint = '/api/v3/ticker/24hr'
 
-    # Fetch market data
     coins_changes = [{
         'symbol': coin['symbol'][:-4].lower(),
         'change': round(float(coin['priceChangePercent']), 3),
@@ -33,22 +138,17 @@ def coin_list(request):
 
     coins_changes_dict = {coin['symbol']: coin for coin in coins_changes}
 
-    # Add custom coins for the current user
-    user = request.user
     custom_coins = []
-
     if user.is_authenticated and user.user_custom_pair:
-        custom_coins = json.loads(user.user_custom_pair)
+        if isinstance(user.user_custom_pair, str):
+            custom_coins = json.loads(user.user_custom_pair)
+        else:
+            custom_coins = user.user_custom_pair
 
-    # Add custom coins field `isCustom` = True
     for coin in custom_coins:
         coin['isCustom'] = True
-        # coin['image'] = coin.image
-        # coin['image'] = f"custom_coins/coinLogo_/{coin['symbol']}.png"  # Correct image path for custom coins
 
-    # Fetch default coins
     if query:
-        # Search default coins
         default_coins = [
             {
                 'id': coin.id,
@@ -56,17 +156,16 @@ def coin_list(request):
                 'slug': coin.slug,
                 'name': coin.name,
                 'image': coin.image.url[7:] if coin.image else None,
-                'isCustom': False,  # Default coins are not custom
+                'isCustom': False,
             } for coin in q_search(query)
         ]
 
-        # Search within custom coins
         if custom_coins:
             custom_coins = [
-                coin for coin in custom_coins if query.lower() in coin['symbol'].lower() or query.lower() in coin['name'].lower()
+                coin for coin in custom_coins
+                if query.lower() in coin['symbol'].lower() or query.lower() in coin['name'].lower()
             ]
     else:
-        # Get all default coins
         default_coins = [
             {
                 'id': coin.id,
@@ -74,33 +173,33 @@ def coin_list(request):
                 'slug': coin.slug,
                 'name': coin.name,
                 'image': coin.image.url[7:] if coin.image else None,
-                'isCustom': False,  # Default coins are not custom
+                'isCustom': False,
             } for coin in Coins.objects.order_by('id')
         ]
 
-    # Combine custom coins with default coins (custom coins come first)
     coins_ = custom_coins + default_coins
 
-    # Enrich data with API data
     coins = []
     for coin in coins_:
-        symbol_key = coin['symbol'].lower()  # Normalize case for API lookup
+        symbol_key = coin['symbol'].lower()
         change_data = coins_changes_dict.get(symbol_key, None)
 
         coin_data = {
-            'id': coin.get('id', None),  # ID may be missing for custom coins
+            'id': coin.get('id', None),
             'symbol': coin['symbol'],
-            'slug': coin.get('slug', ''),  # Custom coins may not have a slug
+            'slug': coin.get('slug', ''),
             'name': coin['name'],
             'image': coin['image'],
-            'isCustom': coin.get('isCustom', False),  # True for custom coins, False for default coins
+            'isCustom': coin.get('isCustom', False),
+            'isFavorite': coin['symbol'] in favorite_coins,
             'change': change_data['change'] if change_data else 0,
             'price': change_data['price'] if change_data else 0,
             'volume': change_data['volume'] if change_data else 0,
         }
         coins.append(coin_data)
 
-    # Context for template rendering
+    coins.sort(key=lambda x: not x['isFavorite'])
+
     context = {
         'title': 'Coins',
         'coins': coins,
@@ -108,6 +207,7 @@ def coin_list(request):
     }
 
     return render(request, 'coinList/coins_list.html', context)
+
 
 def add_coin_image(symbol_name):
     coin_id = symbol_name
@@ -313,3 +413,31 @@ def is_coin_in_custom_pair(user, symbol):
         return False
 
     return any(coin.get('symbol', '').upper() == symbol for coin in custom_pairs)
+
+
+@login_required
+def toggle_favorite_coin(request):
+    print("in togglefavotite")
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        coin_id = data.get('coin_id')
+
+        if not coin_id:
+            return JsonResponse({'error': 'Coin ID is required'}, status=400)
+
+        user = request.user
+        favorite_coins = user.favorite_coins_id or []
+
+        if coin_id in favorite_coins:
+            favorite_coins.remove(coin_id)
+            action = 'removed'
+        else:
+            favorite_coins.append(coin_id)
+            action = 'added'
+
+        user.favorite_coins_id = favorite_coins
+        user.save()
+
+        return JsonResponse({'message': f'Coin {coin_id} has been {action}.', 'favorite_coins': favorite_coins})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

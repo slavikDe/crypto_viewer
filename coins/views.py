@@ -7,6 +7,7 @@ from zipfile import error
 from django.contrib import messages
 from importlib.metadata import files
 
+from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect
@@ -205,3 +206,6 @@ def delete_image(image_path):
         if default_storage.exists(image_path):
             default_storage.delete(image_path)
             # print(f"Image deleted: {image_path}")
+
+
+

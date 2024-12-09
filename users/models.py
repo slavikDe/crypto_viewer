@@ -8,7 +8,7 @@ from coins.models import Coins
 class Users(AbstractUser):
     user_custom_pair = models.CharField(blank=True, null=True)
     image = models.ImageField(upload_to='users_images', blank=True, null=True, verbose_name="avatar")
-    favorite_coins_id = models.CharField(blank=True, null=True, max_length=200, verbose_name="favorite coins")
+    favorite_coins_id =  models.JSONField(default=list, blank=True, verbose_name="favorite coins")
 
     class Meta:
         db_table = 'users'

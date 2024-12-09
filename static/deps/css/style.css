@@ -313,7 +313,19 @@ button[type="submit"] {
 #exchange-selector{
     box-sizing: content-box;
 }
-
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: gray;
+}
+.favorite-btn .favorited {
+    color: gold;
+}
+.favorite-btn .not-favorited {
+    color: gray;
+}
 @media (min-width: 992px) {
     .container {
         max-width: none !important;

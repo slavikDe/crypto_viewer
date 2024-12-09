@@ -144,3 +144,48 @@ function updateCoinInfo(symbol, newPrice, newVolume) {
         console.log("Coin item not found for symbol: ", pureSymbol);
     }
 }
+
+const buttons = document.querySelectorAll('.favorite-btn');
+
+buttons.forEach(button => {
+
+    button.addEventListener('click', (e) => {
+        console.log('clicked favorite');
+        e.preventDefault();
+        const coinId = button.getAttribute('data-coin-id');
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        fetch('/coins/toggle-favorite-coin/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ coin_id: coinId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                const icon = button.querySelector('span');
+                if (icon.classList.contains('favorited')) {
+                    icon.classList.remove('favorited');
+                    icon.classList.add('not-favorited');
+                } else {
+                    icon.classList.remove('not-favorited');
+                    icon.classList.add('favorited');
+                }
+            } else if (data.error) {
+                console.error(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
+document.querySelectorAll('.favorite-btn').forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.stopPropagation();
+        const coinId = this.dataset.coinId;
+        console.log('Favorite clicked for coin:', coinId);
+    });
+});
