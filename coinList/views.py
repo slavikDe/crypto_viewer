@@ -1,23 +1,21 @@
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.conf import settings
 
 import requests
 import os
 
 from django.views.decorators.csrf import csrf_exempt
 
-from coins.models import Coins
-from crypto_viewer.settings import BASE_DIR
+from coins.models import Coins, Market
 from main.utils import q_search
 
 def coin_list(request):
+
+    exchange = request.GET.get('exchange')
+
     # Search
     query = request.GET.get('q', None)
 
@@ -106,6 +104,7 @@ def coin_list(request):
     context = {
         'title': 'Coins',
         'coins': coins,
+        'exchange': exchange,
     }
 
     return render(request, 'coinList/coins_list.html', context)
@@ -133,6 +132,27 @@ def add_coin_image(symbol_name):
     return None
 
 def get_all_coins(request):
+    print("in get_all_coins")
+    exchange = request.GET.get('exchange', None)
+
+    market_data = None
+
+    if exchange:
+        try:
+            market = Market.objects.get(name=exchange)
+            market_data = {
+                'name': market.name,
+                'base_url': market.base_url,
+                'ws_url': market.ws_url,
+            }
+            print('name ', market.name,
+                ' base_url ', market.base_url,
+                ' ws_url ', market.ws_url)
+        except Market.DoesNotExist:
+            return JsonResponse({'error': f'Market "{exchange}" not found.'}, status=404)
+    else:
+        market = None
+
     default_coins = list(Coins.objects.values_list('symbol', flat=True))
 
     user = request.user
@@ -147,10 +167,12 @@ def get_all_coins(request):
             custom_coins = []
 
     all_coins = default_coins + custom_coins
-
-    return JsonResponse({'coins': all_coins}, safe=False)
+    print('coins ', all_coins, ' exchange ' , market_data)
+    return JsonResponse({'coins': all_coins, 'exchange' : market_data}, safe=False)
+    # return JsonResponse({'coins': all_coins}, safe=False)
 
 def make_request(url, param=None):
+    print("make_request: ", url, " , params: ", param)
     response = requests.get(url, params=param)
     result = response.json()
     return result
@@ -183,11 +205,15 @@ def add_default_coin(request):
             # Parse the request data
             data = json.loads(request.body)
             symbol = data.get('symbol', '')[:-4].lower()
-            market = data.get('market', '')
             name = data.get('name', '')
+            market_name = data.get('market', '')
+            market_id = None
 
-            if not symbol or not market:
+            if not symbol or not market_name:
                 return JsonResponse({'error': 'Symbol and market are required'}, status=400)
+
+            if Market.objects.filter(name=market_name).exists():
+                market_id = Market.objects.get(name=market_name).id
 
             if Coins.objects.filter(symbol=symbol.lower()).exists():
                 return JsonResponse({'error': 'Coin already exists in the global list.'}, status=400)
@@ -201,8 +227,9 @@ def add_default_coin(request):
                 symbol=symbol,
                 slug=symbol,
                 name=name,
-                market=market,
+                # market=market,
                 image=image_path,
+                market_id = market_id,
             )
             return JsonResponse({'message': 'Default coin added successfully!'}, status=201)
 

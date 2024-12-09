@@ -6,3 +6,6 @@
 
 .venv/
 media/
+
+text.txt
+settings.py

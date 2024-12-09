@@ -1,53 +1,96 @@
 const worker_path = `/static/deps/js/worker_2.js`;
 
-const market_url = 'wss://wbs.mexc.com/ws';
-const MEXC_base_url = 'https://api.mexc.com';
-const method = 'SUBSCRIPTION';
+// let market_url = null;
+// const MEXC_base_url = 'https://api.mexc.com';
+// const method = 'SUBSCRIPTION';
+let method = null;
 const workers = []
+const exchange = document.getElementById('exchange-selector').value;
+console.log("exchange: ", exchange);
 
 // const all_symbols = Array.from(document.getElementsByClassName('coin_symbol'));
-let all_symbols = []; // from server
-// get symbols from api
+let all_symbols = [];
+let base_url = null;
+let ws_url = null;
 
-fetch('/coins/api/coins/')
-    .then(response => response.json())
-    .then(data => {
-        console.log("fetching api")
-        all_symbols = data.coins;
-        console.warn("all_symbols: ", all_symbols);
-        start(); // create params & open sockets
-    })
-    .catch(error => console.error("Error fetching coins: ", error));
-
-
+// fetch(`/coins/api/coins/?exchange=${exchange}`)
+fetch(`/coins/api/coins/?exchange=${exchange}`, {})
+.then(response => response.json())
+.then(data => {
+    console.log("Coins:", data.coins);
+    all_symbols = data.coins;
+    // base_url = 'https://api.binance.com'
+    // ws_url = 'wss://ws-api.binance.com:443/ws-api/v3'
+    if(data.exchange){
+        base_url = data.exchange.base_url;
+        ws_url = data.exchange.ws_url;
+    }
+    console.log("base_url:", base_url, " ws_url:", ws_url);
+    start(); // create params & open sockets
+})
+.catch(error => console.error("Error fetching coins: ", error));
 
 let results = []
-function createWorker(workerId) {
+function createWorker(workerId, worker_path) {
     const worker = new Worker(worker_path);
 
     worker.onmessage = (event) => {
-        results[workerId] = event.data;
-        // console.log(`Get data from worker-${workerId}, data : ${event.data}`, ", SYMBOL: ", event.data.symbol);
+        // results[workerId] = event.data;
+        let parsedData;
+        try {
+            if (exchange==='MEXC') {
+                if (event.data.d) {
+                    parsedData = {
+                        price: parseFloat(event.data.d.deals[0].p).toFixed(4),
+                        volume: parseFloat(event.data.d.deals[0].v).toFixed(4),
+                        symbol: event.data.s
+                    };
+                    // console.log(`parsedData: ${parsedData.symbol}`, parsedData.price)
+                    updateCoinInfo(parsedData.symbol, parsedData.price, parsedData.volume);
+                }
+            }
+           else if(exchange==='Binance'){
+               if (event.data.s){
+                   parsedData = {
+                       price: parseFloat(event.data.p).toFixed(4),
+                       volume: parseFloat(event.data.q ).toFixed(4),
+                       symbol: event.data.s
+                   };
+                   console.log("parsedData: ", parsedData)
+                    updateCoinInfo(parsedData.symbol, parsedData.price, parsedData.volume);
+               }
+           }
+           else{
+               console.error("Exchange not found");
+            }
 
-        if(event.data) {
-            console.log(`event data ${event.data.symbol}` , event.data.price)
-            updateCoinInfo(event.data.symbol, event.data.price, event.data.volume);
-
+        } catch (error) {
+            console.error("Error creating worker: ", error);
         }
     }
-
     worker.onmessageerror = (error) => {
         console.error(`Error in worker-${workerId}: `, error.data);
     }
     return worker;
 }
 
-function createParams(coins_symbols){
+function createParams(coins_symbols, exchange){
+    console.log("in createParams")
     const results = [];
-    for (let i = 0; i < coins_symbols.length; i++) {
-        results.push(`spot@public.deals.v3.api@${coins_symbols[i].toUpperCase()}USDT`)
+    if (exchange.toLowerCase() === 'mexc') {
+         for (let i = 0; i < coins_symbols.length; i++) {
+            results.push(`spot@public.deals.v3.api@${coins_symbols[i].toUpperCase()}USDT`)
+         }
+         method = 'SUBSCRIPTION'
     }
-    // console.log("params: ", results);
+    else if(exchange.toLowerCase() === 'binance'){
+        for (let i = 0; i < coins_symbols.length; i++) {
+            results.push(`${coins_symbols[i].toLowerCase()}usdt@trade`)
+        }
+        method = 'SUBSCRIBE'
+    }
+
+    console.log("method: ", method);
     return results;
 }
 
@@ -60,17 +103,17 @@ function start() {
             symbols_chunk.push(all_symbols[j]);
         }
 
-
         tasks.push({
-            url: market_url,
+            url: ws_url,
+            params: createParams(symbols_chunk, exchange),
             method: method,
-            params: createParams(symbols_chunk)
+            exchange: exchange
         });
-        // console.log('Task ', i , " ", tasks[i])
+        console.log('Task ', i , " ", tasks[i], ' exchange: ', exchange)
     }
 
     for (let i = 0; i < tasks.length; i++) {
-        const worker = createWorker(i);
+        const worker = createWorker(i, worker_path);
         workers.push(worker);
         // console.log("Tasks size: ", tasks.length);
         worker.postMessage(tasks[i]);

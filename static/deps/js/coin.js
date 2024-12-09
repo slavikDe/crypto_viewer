@@ -2,6 +2,8 @@ let chart = null;
 let interval = '4h';
 let barData = [];
 let symbol;
+let exchange = "MEXC";
+
 
 const getHistoricalPrice = async () => {
     console.log("getHistoricalPrice");
@@ -186,7 +188,7 @@ document.getElementById('applyChanges').addEventListener('click', function(event
 
     const formData = new FormData(document.getElementById('customCoinForm'));
 
-    fetch("/coin/update-coin/", {
+    fetch(`/coin/update-coin/`, {
         method: "POST",
         headers: {
             'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value

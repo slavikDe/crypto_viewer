@@ -1,6 +1,8 @@
 import json
 import os
 import uuid
+from warnings import catch_warnings
+from zipfile import error
 
 from django.contrib import messages
 from importlib.metadata import files
@@ -15,13 +17,16 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from coins.forms import CoinForm
-from coins.models import Coins
+from coins.models import Coins, Market
 from coinList.views import make_request
 from users.forms import ProfileForm
 
 
 def coin(request, coin_slug):
+    exchange = request.GET.get('exchange')
+
     user = request.user
+    print("here")
 
     # Check in user's custom coins
     custom_coin = None
@@ -33,17 +38,22 @@ def coin(request, coin_slug):
             is_custom = True  # Mark as custom coin
 
     # Fetch coin information
-    MEXC_base_url = 'https://api.mexc.com'
+    try:
+        market = Market.objects.get(name=exchange)
+    except Market.DoesNotExist:
+        raise Http404("Coin not found")
+
     endpoint = '/api/v3/ticker/24hr'
 
+    print("endpoint: ", endpoint)
     if is_custom:
         coin = custom_coin
-        coin_info = make_request(MEXC_base_url + endpoint, param={'symbol': coin['symbol'].upper() + 'USDT'})
+        coin_info = make_request(market.base_url + endpoint, param={'symbol': coin['symbol'].upper() + 'USDT'})
         print("custom coin path: :", coin['image'])
     else:
         try:
             coin = Coins.objects.get(slug=coin_slug)
-            coin_info = make_request(MEXC_base_url + endpoint, param={'symbol': coin.symbol.upper() + 'USDT'})
+            coin_info = make_request(market.base_url + endpoint, param={'symbol': coin.symbol.upper() + 'USDT'})
         except Coins.DoesNotExist:
             raise Http404("Coin not found")
 

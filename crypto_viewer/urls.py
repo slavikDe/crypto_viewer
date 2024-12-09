@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 
+from django.contrib.auth import views as auth_views
+
 from crypto_viewer import settings
 
 urlpatterns = [
@@ -26,7 +28,6 @@ urlpatterns = [
     path('coins/', include('coinList.urls', namespace='coinList')),
     path('coin/', include('coins.urls', namespace='coins')),
     path('user/', include('users.urls', namespace='user')),
-
 ]
 
 if settings.DEBUG:

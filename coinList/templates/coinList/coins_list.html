@@ -13,10 +13,26 @@
             <button class="btn btn-outline-success text-white" type="submit">Search</button>
         </form>
 
+
+        <div class="form_exchange">
+            <form action="" method="get">
+                <select id="exchange-selector" name="exchange" class="form-select mr-2" required>
+                    <option value="MEXC" {% if request.GET.exchange == "MEXC" %}selected{% endif %}>MEXC</option>
+                    <option value="Binance" {% if request.GET.exchange == "Binance" %}selected{% endif %}>BINANCE</option>
+                </select>
+                <button type="submit" class="btn btn-primary" style="margin-left: 10px">Apply</button>
+            </form>
+        </div>
+
         <!-- Coin manipulation -->
         <!-- Кнопка для відкриття модального вікна -->
-        <button id="openModalBtn" class="btn btn-outline-success text-white">+ Add Custom Coin</button>
-        <button id="openModalBtnAdmin" class="btn btn-outline-success text-white">+ Add Admin Coin</button>
+        {% if user.is_authenticated %}
+        	{% if user.is_superuser %}
+                <button id="openModalBtnAdmin" class="btn btn-outline-success text-white">+ Add Admin Coin</button>
+        	{% else %}
+                <button id="openModalBtn" class="btn btn-outline-success text-white">+ Add Custom Coin</button>
+            {% endif %}
+        {% endif %} 
 
         <!-- Модальне вікно -->
         <!-- Add coin -->
@@ -35,7 +51,6 @@
                         <div >
                             <input type="text" class="add_coin_input" id="symbol" name="symbol" placeholder="Enter symbol" required>
                             <span class="tooltip-icon" title="The unique symbol used to search for the coin's data.">ⓘ</span>
-
                         </div>
                         <div >
                             <input type="text" class="add_coin_input"  id="coin-name" name="coin-name" placeholder="Enter coin name" required >
@@ -56,7 +71,8 @@
     <div class="crypto-list">
         <!-- header start -->
         <div class="list_header">
-            <div class="list_header_item">№</div>
+            <div class="list_header_item" style="max-width: 30px">
+                <span class="tooltip-icon" title="№ by market capitalization">№</span></div>
             <div class="list_header_item" style="flex: 3">Name</div>
             <div class="list_header_item" style="flex: 2">
                 <div  style="cursor: pointer">Price <span onclick="toggleSortOrder()">&#x25b4;&#x25be;</span></div>
@@ -69,13 +85,12 @@
         <!-- content coin start -->
         <div class="coin_wrapper" style="display:flex; flex-direction: column; height: 100%;">
             {% for coin in coins %}
-            <div class="coin_item_wrapper" onclick="window.location.href='{% url 'coins:coin' coin_slug=coin.slug %}'">
+            <div class="coin_item_wrapper" onclick="window.location.href=`{% url 'coins:coin' coin_slug=coin.slug  %}?exchange=${exchange}`">
                 <div class="coin_item" data-symbol="{{ coin.symbol }}">
                     <div class="coin index">{{ forloop.counter }}</div>
                     <div class="coin name">
                         {% if coin.image %}
                             <img src="/{{ coin.image }}" alt="logo" class="coin_logo">
-{#                            <img src="/{{ coin.image }}" alt="logo" class="coin_logo">#}
                         {% else %}
                             <img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">
                         {% endif %}
@@ -85,13 +100,13 @@
                         {% endif %}
 
                     </div>
-                    <div class="coin price">{{ coin.price }}</div>
-                    <div class="coin volume">{{ coin.volume }}</div>
+                    <div class="coin price">{{ coin.price|floatformat:2 }}</div>
+                    <div class="coin volume">{{ coin.volume|floatformat:2 }}</div>
                     <div class="coin change">
                         {% if  coin.change > 0 %}
-                            <span class="positive">▲ {{  coin.change }}%</span>
+                            <span class="positive">▲ {{  coin.change|floatformat:2 }}%</span>
                             {% else %}
-                            <span class="negative">▼ {{  coin.change }}%</span>
+                            <span class="negative">▼ {{  coin.change|floatformat:2 }}%</span>
                         {% endif %}
                     </div>
                 </div>
@@ -100,49 +115,13 @@
         </div>
          <!-- content coin end -->
     </div>
-
-{#    <!-- Pagination -->#}
-{#    <nav aria-label="Page navigation example">#}
-{#        {% if coins.paginator.num_pages > 1 %}#}
-{#        <ul class="pagination justify-content-center custom-shadow d-flex">#}
-{#            <li class="page-item {% if not coins.has_previous %}disabled{% endif %}">#}
-{#                <a class="page-link" href="?page=1">&laquo; First</a>#}
-{#            </li>#}
-{#            <li class="page-item {% if not coins.has_previous %}disabled{% endif %}">#}
-{#                <a class="page-link" href="{% if coins.has_previous %}?{% change_params page=coins.previous_page_number %}{% else %}# {% endif %}">Previous</a>#}
-{#            </li>#}
-{##}
-{#            {% for page in coins.paginator.page_range %}#}
-{#            {% if page >= coins.number|add:-2 and page <= coins.number|add:2 %}#}
-{#            <li class="page-item {% if coins.number == page %} active {% endif %}">#}
-{#                <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>#}
-{#            </li>#}
-{#            {% endif %}#}
-{#            {% endfor %}#}
-{##}
-{#            <li class="page-item {% if not coins.has_next %}disabled{% endif %}">#}
-{#                <a class="page-link" href="{% if coins.has_next %}?{% change_params page=coins.next_page_number %}{% else %}# {% endif %}">Next</a>#}
-{#            </li>#}
-{#            <li class="page-item {% if not coins.has_next %}disabled{% endif %}">#}
-{#                <a class="page-link" href="?page={{ coins.paginator.num_pages }}">Last &raquo;</a>#}
-{#            </li>#}
-{#        </ul>#}
-{#        {% endif %}#}
-{#    </nav>#}
 </div>
 {% endblock %}
 
-{#{% block footer %}#}
-{#    <!-- footer start -->#}
-{#    <footer>#}
-{#    </footer>#}
-{#    <!-- footer end -->#}
-{#{% endblock %}#}
+
 
 {% block scripts %}
     <script src="{% static 'deps/js/main_2.js' %}"></script>
     <script src="{% static 'deps/js/sorting.js' %}"></script>
     <script src="{% static 'deps/js/coins_interaction.js' %}"></script>
-
-
 {% endblock %}

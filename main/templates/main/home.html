@@ -1,6 +1,110 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block css %}
+	<title>Welcome to Crypto Viewer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: #fff;
+        }
+
+        .welcome-container {
+            text-align: center;
+            animation: fadeIn 2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: #f39c12;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .features {
+            margin: 20px 0;
+            text-align: center;
+            display: inline-block;
+            padding: 0;
+        }
+
+        .features li {
+            list-style: none;
+            margin: 10px 0;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap:10px;
+        }
+
+        button {
+            background-color: #007BFF;
+            margin-top: 20px;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e67e22;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        header{
+            display: none;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    <h1>{{ content }}</h1>
+     <div class="welcome-container">
+        <h1>Welcome to Crypto Viewer</h1>
+        <p>Track cryptocurrency prices, analyze trends, and manage your custom trading pairs.</p>
+        <ul class="features">
+            <li>📊 Real-time cryptocurrency data</li>
+            <li>🔍 Search and filter functionality</li>
+            <li>📈 Interactive charts for in-depth analysis</li>
+            <li>🛠️ Custom trading pair management</li>
+        </ul>
+        <button onclick="goToCoinList()">Start Exploring</button>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+	 <script>
+        function goToCoinList() {
+            window.location.href = "{% url 'coinList:index' %}";
+        }
+    </script>
 {% endblock %}

@@ -7,9 +7,9 @@ const addButton = document.getElementById('addButton');
 const statusMessage = document.getElementById('statusMessage');
 let isAdminUser = false;
 
-openModalButton.addEventListener('click', function () {
-    modal.style.display = 'block';
-});
+// openModalButton.addEventListener('click', function () {
+//     modal.style.display = 'block';
+// });
 
 openModalButtonAdmin.addEventListener('click', function () {
     modal.style.display = 'block';
@@ -32,7 +32,8 @@ window.addEventListener('click', function (event) {
 
 testButton.addEventListener('click', function () {
     console.log('isSuperUser: ', isAdminUser)
-    const market = document.getElementById('coin-market').value;
+    const market = document.getElementById('exchange-selector').value;
+
     const symbol = document.getElementById('symbol').value.trim() + 'USDT';
     const name = document.getElementById('coin-name').value;
 
