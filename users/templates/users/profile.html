@@ -29,28 +29,28 @@
                                 	<div class="alert alert-danger alert-dismissible fade show">{{ form.image.error }}</div>
                                 {% endif %} 
                             </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="id_first_name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="id_first_name"
-                                       name="first_name"
-                                       placeholder="Enter your name"
-                                       value="{{ form.first_name.value }}"
-                                       required>
-                                {% if form.first_name.error %}
-                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.first_name.error }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="id_last_name" class="form-label">Surname</label>
-                                <input type="text" class="form-control" id="id_last_name"
-                                       name="last_name"
-                                       placeholder="Enter your surname"
-                                       value="{{ form.last_name.value }}"
-                                       required>
-                                {% if form.last_name.error %}
-                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.last_name.error }}</div>
-                                {% endif %}
-                            </div>
+{#                            <div class="col-md-12 mb-3">#}
+{#                                <label for="id_first_name" class="form-label">Name</label>#}
+{#                                <input type="text" class="form-control" id="id_first_name"#}
+{#                                       name="first_name"#}
+{#                                       placeholder="Enter your name"#}
+{#                                       value="{{ form.first_name.value }}"#}
+{#                                       required>#}
+{#                                {% if form.first_name.error %}#}
+{#                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.first_name.error }}</div>#}
+{#                                {% endif %}#}
+{#                            </div>#}
+{#                            <div class="col-md-12 mb-3">#}
+{#                                <label for="id_last_name" class="form-label">Surname</label>#}
+{#                                <input type="text" class="form-control" id="id_last_name"#}
+{#                                       name="last_name"#}
+{#                                       placeholder="Enter your surname"#}
+{#                                       value="{{ form.last_name.value }}"#}
+{#                                       required>#}
+{#                                {% if form.last_name.error %}#}
+{#                                	<div class="alert alert-danger alert-dismissible fade show">{{ form.last_name.error }}</div>#}
+{#                                {% endif %}#}
+{#                            </div>#}
                             <div class="col-md-12 mb-3">
                                 <label for="id_username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="id_username"
@@ -75,10 +75,15 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-dark">Save</button>
+                        <button type="submit" id="deleteBtn" class="btn btn-dark">Delete account</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'deps/js/script.js' %}"></script>
 {% endblock %}

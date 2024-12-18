@@ -17,8 +17,9 @@ let ws_url = null;
 fetch(`/coins/api/coins/?exchange=${exchange}`, {})
 .then(response => response.json())
 .then(data => {
-    console.log("Coins:", data.coins);
+    // console.log("exchanges:", document.getElementById('exchange-selector'));
     all_symbols = data.coins;
+
     // base_url = 'https://api.binance.com'
     // ws_url = 'wss://ws-api.binance.com:443/ws-api/v3'
     if(data.exchange){
@@ -30,7 +31,7 @@ fetch(`/coins/api/coins/?exchange=${exchange}`, {})
 })
 .catch(error => console.error("Error fetching coins: ", error));
 
-let results = []
+
 function createWorker(workerId, worker_path) {
     const worker = new Worker(worker_path);
 

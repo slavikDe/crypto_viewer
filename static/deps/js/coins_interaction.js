@@ -86,7 +86,7 @@ addButton.addEventListener('click', function () {
     const market = addButton.dataset.market;
     const symbol = addButton.dataset.symbol;
     const name = addButton.dataset.name;
-
+    console.log("market: ", market)
     if (!market || !symbol) {
         showStatusMessage('Invalid data. Please test again.', 'red');
         return;

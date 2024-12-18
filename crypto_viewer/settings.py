@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-n-5o$iv#fgu#cni5cm9zqhglvq7&%@9rxab!ae4e2m%0mxjarr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
 
 
-    # 'channels',
+    'django.contrib.humanize',
     'chartjs',
-    # 'debug_toolbar',
+
 
     'main',
     'coins',
@@ -147,3 +147,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INTERNAL_IPS = ['127.0.0.1']
+

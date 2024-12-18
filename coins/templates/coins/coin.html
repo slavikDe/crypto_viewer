@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'deps/css/coin.css' %}">
@@ -73,8 +74,8 @@
         <div class="form_exchange">
             <form action="" method="get">
                 <select id="exchange-selector" name="exchange" class="form-select mr-2" required>
-                    <option value="MEXC" {% if request.GET.exchange == "MEXC" %}selected{% endif %}>MEXC</option>
-                    <option value="Binance" {% if request.GET.exchange == "Binance" %}selected{% endif %}>BINANCE</option>
+                    <option value="MEXC" {% if request.GET.exchange == "MEXC" %}selected{% endif %} class="exchange">MEXC</option>
+                    <option value="Binance" {% if request.GET.exchange == "Binance" %}selected{% endif %} class="exchange">BINANCE</option>
                 </select>
                 <button type="submit" class="btn btn-primary" style="margin-left: 10px">Apply</button>
             </form>
@@ -154,7 +155,6 @@
         </div>
 
         <div class="graphics"  >
-
             {# Interval from for global chart. Using js  #}
             <form id="radio-form">
                  <div class="custom-control custom-radio">
@@ -178,50 +178,102 @@
                     <label class="custom-control-label  text-white" for="radio1M">1M</label>
                  </div>
             </form>
-           <div style="display: flex; justify-content: center; align-items: center">
-                <canvas id="chart" style="width: calc(100vw - 20px); margin: 0 auto"></canvas>
+           <div style="display: flex; justify-content: center; align-items: center;">
+                <canvas id="chart" style="margin: 0 auto"></canvas>
            </div>
         </div>
 
-        <h1 style="text-align: center; color: #334155;">Order Book Visualization</h1>
-        <div class="order-books-container">
-            <!-- Ордербук для першої біржі -->
-            <div class="order-book">
-                <h3 class="order-book-title">Exchange 1</h3>
-                <div class="order-section sellers">
-                    <h4 class="order-section-title">Sellers</h4>
-                    <ul class="order-list order-sellers" id="exchange1-sellers">
-                        <!-- Продавці будуть рендеритися тут -->
-                    </ul>
+{#            <div style="background-color:#ffffff; width: 80%; margin: 0 auto; border-radius: 16px ">#}
+{#                <h1 style="text-align: center">Comaring exchanges</h1>#}
+{#            </div>#}
+            <div class="live_charts">
+                    <canvas id="chart_1" width="800" height="400"></canvas>
+                    <canvas id="chart_2" width="800" height="400"></canvas>
+            </div>
+
+            <div class="exchange-info-container">
+                <!-- Hardcoded Recent Trades Tables -->
+                <div class="exchange-column">
+                    <h3>MEXC</h3>
+                    <div class="recent-trades">
+                        <h4>Recent Trades - time period <span class="period-recent-trades"></span> seconds</h4>
+                        <table class="trades-table" id="table-mexc">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>AVG Price (USDT)</th>
+                                    <th>Total Volume (BTC)</th>
+                                    <th>Trades</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="order-section buyers">
-                    <h4 class="order-section-title">Buyers</h4>
-                    <ul class="order-list order-buyers" id="exchange1-buyers">
-                        <!-- Покупці будуть рендеритися тут -->
-                    </ul>
+                <div class="exchange-column">
+                    <h3>Binance</h3>
+                    <div class="recent-trades">
+                        <h4>Recent Trades - time period <span class="period-recent-trades"></span> seconds</h4>
+                        <table class="trades-table" id="table-binance">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>AVG Price (USDT)</th>
+                                    <th>Total Volume (BTC)</th>
+                                    <th>Trades</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- Ордербук для другої біржі -->
-            <div class="order-book">
-                <h3 class="order-book-title">Exchange 2</h3>
-                <div class="order-section sellers">
-                    <h4 class="order-section-title">Sellers</h4>
-                    <ul class="order-list order-sellers" id="exchange2-sellers">
-                        <!-- Продавці будуть рендеритися тут -->
-                    </ul>
+            <!-- General Info for Exchanges -->
+            <div class="exchange-info-container">
+                {% for exchange in exchanges %}
+                <div class="exchange-column">
+{#                    <h3>{{ exchange.name|upper }}</h3>#}
+                    <div class="general-info">
+                        <h4>General Info 24h</h4>
+                        <div class="info-item">
+                            <span class="label">24h Change:</span>
+                            <span class="value {% if exchange.priceChange < 0 %}red{% else %}green{% endif %}">
+                                {{ exchange.priceChange|floatformat:2 }} USDT
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">24h Change Percent:</span>
+                            <span class="value {% if exchange.priceChangePercent < 0 %}red{% else %}green{% endif %}">
+                                {{ exchange.priceChangePercent|floatformat:4 }}%
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Min Price:</span>
+                            <span class="value {% if exchange.priceChange < 0 %}red{% else %}green{% endif %}">
+                                {{ exchange.lowPrice|floatformat:2 }}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Max Price:</span>
+                            <span class="value {% if exchange.priceChange < 0 %}red{% else %}green{% endif %}">
+                                {{ exchange.highPrice|floatformat:2|intcomma }}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Volume:</span>
+                            <span class="value">{{ exchange.quoteVolume|floatformat:2|intcomma }} USDT</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Volume (BTC):</span>
+                            <span class="value">{{ exchange.volume|floatformat:2 }}</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="order-section buyers">
-                    <h4 class="order-section-title">Buyers</h4>
-                    <ul class="order-list order-buyers" id="exchange2-buyers">
-                        <!-- Покупці будуть рендеритися тут -->
-                    </ul>
-                </div>
+                {% endfor %}
             </div>
-        </div>
-
-
     </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -234,7 +286,6 @@
     <script src="{% static 'deps/js/chartjs-chart-financial.min.js' %}" type="text/javascript"></script>
 
     <script src="{% static 'deps/js/coin.js' %}"></script>
-    <script src="{% static 'deps/js/order-book.js' %}"></script>
+{#    <script src="{% static 'deps/js/order-book.js' %}"></script>#}
 
 {% endblock %}
-

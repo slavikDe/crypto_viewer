@@ -6,6 +6,12 @@ class Coins(models.Model):
     image = models.ImageField( blank=True, null=True, verbose_name='image')
     slug = models.SlugField(max_length=100, unique=True, verbose_name="URL", blank=True, null=True)
     market_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="Market ID")
+    markets = models.ManyToManyField(
+        'Market',
+        related_name='coins',
+        verbose_name="Markets",
+        blank=True
+    )
 
     def __str__(self):
         return f"{self.name} ({self.symbol})"

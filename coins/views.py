@@ -1,30 +1,30 @@
 import json
 import os
 import uuid
-from warnings import catch_warnings
-from zipfile import error
+from linecache import cache
 
-from django.contrib import messages
-from importlib.metadata import files
+import requests
 
-from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, Http404, HttpResponseRedirect
-import requests
-from django.template.defaulttags import csrf_token
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from coins.forms import CoinForm
 from coins.models import Coins, Market
 from coinList.views import make_request
-from users.forms import ProfileForm
+
+# exchanges = [
+#     { 'name': 'MEXC', },
+#     { 'name': 'Binance', }
+# ]
+
 
 
 def coin(request, coin_slug):
-    exchange = request.GET.get('exchange')
+    exchange_name = request.GET.get('exchange')
 
     user = request.user
     print("here")
@@ -40,35 +40,60 @@ def coin(request, coin_slug):
 
     # Fetch coin information
     try:
-        market = Market.objects.get(name=exchange)
+        market = Market.objects.get(name=exchange_name)
     except Market.DoesNotExist:
         raise Http404("Coin not found")
 
     endpoint = '/api/v3/ticker/24hr'
-
     print("endpoint: ", endpoint)
+    diff_exchange = Market.objects.exclude(name=exchange_name).first()
+
     if is_custom:
         coin = custom_coin
         coin_info = make_request(market.base_url + endpoint, param={'symbol': coin['symbol'].upper() + 'USDT'})
+        exchange_to_compare = make_request(diff_exchange.base_url + endpoint,
+                                               param={'symbol': coin['symbol'].upper() + 'USDT'})
         print("custom coin path: :", coin['image'])
     else:
         try:
             coin = Coins.objects.get(slug=coin_slug)
             coin_info = make_request(market.base_url + endpoint, param={'symbol': coin.symbol.upper() + 'USDT'})
+            exchange_to_compare = make_request(diff_exchange.base_url + endpoint,
+                                               param={'symbol': coin.symbol.upper() + 'USDT'})
+
         except Coins.DoesNotExist:
             raise Http404("Coin not found")
 
-    # Determine if the user is an admin
     is_admin_user = user.is_authenticated and user.is_superuser
-    # print("image path: ", c)
-    # Context for the template
+
+    exchanges = [
+        {**coin_info, 'name':market.name},
+        {**exchange_to_compare, 'name':diff_exchange.name},
+    ]
+
+    standard_keys = [
+        'symbol', 'priceChange', 'priceChangePercent',
+        'highPrice', 'lowPrice', 'volume', 'quoteVolume', 'openTime', 'closeTime', 'name'
+    ]
+
+    standardized_exchanges = [standardize_exchange_data(exchange, standard_keys) for exchange in exchanges]
+    print("Standardized Exchanges:")
+    for ex in standardized_exchanges:
+        print(ex)
+
     context = {
-        'coin': coin,  # Coin data (custom or default)
-        'coin_info': coin_info,  # Market data
-        'is_custom': is_custom,  # Is this a custom coin?
-        'is_admin_user': is_admin_user,  # Is the user an admin?
+        'coin': coin,  #
+        'coin_info': coin_info,
+        'is_custom': is_custom,
+        'is_admin_user': is_admin_user,
+        'another_exchange' : None,
+        'exchanges': exchanges,
     }
     return render(request, 'coins/coin.html', context)
+
+def standardize_exchange_data(data, keys):
+    return {key: data.get(key, None) for key in keys}
+
 def get_historical_price(request):
     # Mexc API URL
     symbol = request.GET.get('symbol')
@@ -110,11 +135,12 @@ def update_coin(request):
 
                 coin['name'] = name
                 if image:
-                    delete_image(coin.get('image'))
+                    if coin.get('image'):
+                        delete_image(coin.get('image'))
 
                     ext = image.name.split('.')[-1]
                     filename = f"{uuid.uuid4()}.{ext}"
-                    custom_logo_path = os.path.join('customCoinLogo', filename)
+                    custom_logo_path = os.path.join(settings.MEDIA_ROOT, 'customCoinLogo', filename)
 
                     path = default_storage.save(custom_logo_path, ContentFile(image.read()))
                     coin['image'] = os.path.join('media', path)
@@ -133,6 +159,7 @@ def update_coin(request):
 
                 coin.name = name
                 if image:
+                    print("deleting default image path: ", coin.image.path)
                     delete_image(coin.image.path if coin.image else None)
 
                     ext = image.name.split('.')[-1]
@@ -167,7 +194,7 @@ def delete_coin(request):
                 if not coin:
                     return JsonResponse({"success": False, 'message': "Custom coin not found"})
 
-                delete_image(coin.get('image'))
+                delete_image(coin.get('image') if coin.get('image') else None)
 
                 custom_coins = [coin_ for coin_ in custom_coins if coin_["symbol"] != symbol]
                 user.user_custom_pair = json.dumps(custom_coins)
@@ -181,7 +208,8 @@ def delete_coin(request):
                 if not coin:
                     return JsonResponse({'success': False, 'redirect_url': reverse('coinList:index')})
 
-                delete_image(coin.image.path if coin.image else None)
+                if coin.image:
+                    delete_image(coin.image.path if coin.image else None)
 
                 coin.delete()
 
@@ -202,10 +230,9 @@ def delete_image(image_path):
     Видаляє зображення, якщо воно існує в файловій системі.
     """
     if image_path:
-        image_path = image_path.replace('media/', '')
-        if default_storage.exists(image_path):
-            default_storage.delete(image_path)
-            # print(f"Image deleted: {image_path}")
-
-
+        # abs_path = os.path.join(settings.MEDIA_ROOT, image_path.replace('media/', ''))
+        abs_path = image_path
+        if default_storage.exists(abs_path):
+            default_storage.delete(abs_path)
+            print(f"Image deleted: {abs_path}")
 

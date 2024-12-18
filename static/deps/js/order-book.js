@@ -39,34 +39,33 @@ function renderOrderBook(exchange, data) {
         .join("");
 }
 
-
 const exampleData = {
 exchange1: {
     sellers: [
-        { price: "100.50", amount: "1.2" },
-        { price: "100.40", amount: "2.8" },
-        { price: "100.30", amount: "1.5" },
-        { price: "100.20", amount: "3.0" },
+        // { price: "100.50", amount: "1.2" },
+        // { price: "100.40", amount: "2.8" },
+        // { price: "100.30", amount: "1.5" },
+        // { price: "100.20", amount: "3.0" },
     ],
     buyers: [
-        { price: "99.50", amount: "1.8" },
-        { price: "99.40", amount: "4.3" },
-        { price: "99.30", amount: "2.0" },
-        { price: "99.20", amount: "1.7" },
+        // { price: "99.50", amount: "1.8" },
+        // { price: "99.40", amount: "4.3" },
+        // { price: "99.30", amount: "2.0" },
+        // { price: "99.20", amount: "1.7" },
     ],
 },
 exchange2: {
     sellers: [
-        { price: "200.50", amount: "0.6" },
-        { price: "200.40", amount: "1.3" },
-        { price: "200.30", amount: "1.1" },
-        { price: "200.20", amount: "0.9" },
+        // { price: "200.50", amount: "0.6" },
+        // { price: "200.40", amount: "1.3" },
+        // { price: "200.30", amount: "1.1" },
+        // { price: "200.20", amount: "0.9" },
     ],
     buyers: [
-        { price: "199.50", amount: "2.1" },
-        { price: "199.40", amount: "1.5" },
-        { price: "199.30", amount: "1.8" },
-        { price: "199.20", amount: "0.6" },
+        // { price: "199.50", amount: "2.1" },
+        // { price: "199.40", amount: "1.5" },
+        // { price: "199.30", amount: "1.8" },
+        // { price: "199.20", amount: "0.6" },
     ],
 },
 };
@@ -106,6 +105,7 @@ function createWorker(worker_path) {
 
     return worker;
 }
+
 function start() {
     let task = [];
     task.push({
@@ -165,7 +165,6 @@ function processData(data) {
 
     updateOrderBook({ topSellers, topBuyers });
 }
-
 
 function updateOrderBook(data) {
     const { topSellers, topBuyers } = data;

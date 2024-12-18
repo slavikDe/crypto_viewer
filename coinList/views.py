@@ -1,113 +1,13 @@
-import json
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-
-import requests
-import os
-
 from django.views.decorators.csrf import csrf_exempt
-
 from coins.models import Coins, Market
 from main.utils import q_search
 
-# def coin_list(request):
-#
-#     exchange = request.GET.get('exchange')
-#
-#     # Search
-#     query = request.GET.get('q', None)
-#
-#     # API for market data
-#     MEXC_base_url = 'https://api.mexc.com'
-#     endpoint = '/api/v3/ticker/24hr'
-#
-#     # Fetch market data
-#     coins_changes = [{
-#         'symbol': coin['symbol'][:-4].lower(),
-#         'change': round(float(coin['priceChangePercent']), 3),
-#         'price': round(float(coin['prevClosePrice']), 3),
-#         'volume': round(float(coin['volume']), 3),
-#     } for coin in make_request(MEXC_base_url + endpoint)]
-#
-#     coins_changes_dict = {coin['symbol']: coin for coin in coins_changes}
-#
-#     # Add custom coins for the current user
-#     user = request.user
-#     custom_coins = []
-#
-#     if user.is_authenticated and user.user_custom_pair:
-#         custom_coins = json.loads(user.user_custom_pair)
-#
-#     # Add custom coins field `isCustom` = True
-#     for coin in custom_coins:
-#         coin['isCustom'] = True
-#         # coin['image'] = coin.image
-#         # coin['image'] = f"custom_coins/coinLogo_/{coin['symbol']}.png"  # Correct image path for custom coins
-#
-#     # Fetch default coins
-#     if query:
-#         # Search default coins
-#         default_coins = [
-#             {
-#                 'id': coin.id,
-#                 'symbol': coin.symbol,
-#                 'slug': coin.slug,
-#                 'name': coin.name,
-#                 'image': coin.image.url[7:] if coin.image else None,
-#                 'isCustom': False,  # Default coins are not custom
-#             } for coin in q_search(query)
-#         ]
-#
-#         # Search within custom coins
-#         if custom_coins:
-#             custom_coins = [
-#                 coin for coin in custom_coins if query.lower() in coin['symbol'].lower() or query.lower() in coin['name'].lower()
-#             ]
-#     else:
-#         # Get all default coins
-#         default_coins = [
-#             {
-#                 'id': coin.id,
-#                 'symbol': coin.symbol,
-#                 'slug': coin.slug,
-#                 'name': coin.name,
-#                 'image': coin.image.url[7:] if coin.image else None,
-#                 'isCustom': False,  # Default coins are not custom
-#             } for coin in Coins.objects.order_by('id')
-#         ]
-#
-#     # Combine custom coins with default coins (custom coins come first)
-#     coins_ = custom_coins + default_coins
-#
-#     # Enrich data with API data
-#     coins = []
-#     for coin in coins_:
-#         symbol_key = coin['symbol'].lower()  # Normalize case for API lookup
-#         change_data = coins_changes_dict.get(symbol_key, None)
-#
-#         coin_data = {
-#             'id': coin.get('id', None),  # ID may be missing for custom coins
-#             'symbol': coin['symbol'],
-#             'slug': coin.get('slug', ''),  # Custom coins may not have a slug
-#             'name': coin['name'],
-#             'image': coin['image'],
-#             'isCustom': coin.get('isCustom', False),  # True for custom coins, False for default coins
-#             'change': change_data['change'] if change_data else 0,
-#             'price': change_data['price'] if change_data else 0,
-#             'volume': change_data['volume'] if change_data else 0,
-#         }
-#         coins.append(coin_data)
-#
-#     # Context for template rendering
-#     context = {
-#         'title': 'Coins',
-#         'coins': coins,
-#         'exchange': exchange,
-#     }
-#
-#     return render(request, 'coinList/coins_list.html', context)
+import json
+import requests
+import os
 
 def coin_list(request):
     user = request.user
@@ -304,33 +204,35 @@ def add_default_coin(request):
         try:
             # Parse the request data
             data = json.loads(request.body)
-            symbol = data.get('symbol', '')[:-4].lower()
-            name = data.get('name', '')
-            market_name = data.get('market', '')
-            market_id = None
+            symbol = data.get('symbol', '').strip().lower()[:-4]
+            name = data.get('name', '').strip()
+            market_names = data.get('market', [])
+            print("symbol market: ", symbol, market_names)
 
-            if not symbol or not market_name:
-                return JsonResponse({'error': 'Symbol and market are required'}, status=400)
+            if not symbol or not market_names:
+                print("symbol bad")
+                return JsonResponse({'error': 'Symbol and at least one market are required'}, status=400)
 
-            if Market.objects.filter(name=market_name).exists():
-                market_id = Market.objects.get(name=market_name).id
-
-            if Coins.objects.filter(symbol=symbol.lower()).exists():
+            if Coins.objects.filter(symbol=symbol).exists():
                 return JsonResponse({'error': 'Coin already exists in the global list.'}, status=400)
 
-            # Add image for default coin
             image_path = add_coin_image(name)
             print("addDefaultCoin imgPath: ", image_path)
 
-            # Add coin to the global database
-            Coins.objects.create(
+            coin = Coins.objects.create(
                 symbol=symbol,
                 slug=symbol,
                 name=name,
-                # market=market,
                 image=image_path,
-                market_id = market_id,
+                market_id=Market.objects.get(name=market_names).id,
             )
+
+            markets = Market.objects.filter(name=market_names)
+            print('markets: ', markets)
+            if not markets:
+                return JsonResponse({'error': 'One or more specified markets do not exist.'}, status=400)
+
+            coin.markets.set(markets)
             return JsonResponse({'message': 'Default coin added successfully!'}, status=201)
 
         except json.JSONDecodeError:
@@ -339,6 +241,7 @@ def add_default_coin(request):
             return JsonResponse({'error': f'An unexpected error occurred: {str(e)}'}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 
 
 
@@ -417,7 +320,6 @@ def is_coin_in_custom_pair(user, symbol):
 
 @login_required
 def toggle_favorite_coin(request):
-    print("in togglefavotite")
     if request.method == 'POST':
         data = json.loads(request.body)
         coin_id = data.get('coin_id')
