@@ -21,7 +21,7 @@ Crypto Viewer is a web application designed for tracking cryptocurrency prices a
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/slavikDe/crypto-viewer.git
+   git clone https://github.com/slavikDe/crypto_viewer.git
 2. Navigate to the project directory:
    ```bash
    cd crypto-viewer
