@@ -51,8 +51,9 @@ ul {
     border-right: 0 solid;
 }
 .coin-actions{
-    margin: 0 auto 50px auto;
+    margin: 0 auto ;
 }
+
 #editDefaultCoinBtn{
     width: 100%;
 }
@@ -667,7 +668,12 @@ ul {
     margin-bottom: 10px;
     flex-wrap: wrap;
 }
-
+.form_exchange{
+    background-color: #edf0f2;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
 
 
 

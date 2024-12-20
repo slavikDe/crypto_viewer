@@ -100,11 +100,11 @@
                             <img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="coin_logo">
                         {% endif %}
                         <span class="coin_symbol">{{ coin.symbol|upper }}</span>
-                        {% if coin.isCustom %}
-                            <span>Custom</span>
-                        {% endif %}
-
+{#                        {% if coin.isCustom %}#}
+{#                            <span>Custom</span>#}
+{#                        {% endif %}#}
                     </div>
+
                     <div class="coin price">{{ coin.price|floatformat:2 }}</div>
                     <div class="coin volume">{{ coin.volume|floatformat:2 }}</div>
                     <div class="coin change">

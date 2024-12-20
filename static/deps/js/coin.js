@@ -216,10 +216,10 @@ document.getElementById('applyChanges').addEventListener('click', function (even
 
 // delete coin
 document.getElementById('deleteCoin').addEventListener('click', function () {
-    event.preventDefault(); // Забороняємо стандартну поведінку форми
+    event.preventDefault();
 
     const formData = new FormData(document.getElementById('customCoinForm'));
-
+    // console.error("formData: ", formData)
     fetch("/coin/delete-coin/", {
         method: "POST",
         headers: {
@@ -414,13 +414,11 @@ const updateChart = (chart, data) => {
     console.warn("xLabels: ", data.time)
     const maxVisiblePoints = 10;
 
-    // Видаляємо старі дані
     if (chart.data.labels.length > maxVisiblePoints) {
         chart.data.labels.shift();
         chart.data.datasets[0].data.shift();
     }
 
-    // Налаштовуємо межі для `x`
     const minTime = new Date(chart.data.labels[0]);
     const maxTime = new Date(chart.data.labels[chart.data.labels.length - 1]);
 
@@ -578,6 +576,7 @@ const calculateAverage = (data) => {
 
 const totalVol = (data) => {
     let result = 0;
+    console.log("TotalVolume data: ", data);
     for(let i = 0; i < data.length; i++) {
         result += data[i].volume;
     }
@@ -587,6 +586,7 @@ const totalVol = (data) => {
 const startAveraging = (exchange) => {
     setInterval(() => {
         const data = bufferedData[exchange.exchange_name];
+
         console.log("summarize data: ", data);
         if (data.length > 0) {
             const averagePrice = calculateAverage(data);
@@ -646,17 +646,19 @@ const createWorker = (workerPath, exchange) => {
 const parseData = (data) => {
     try {
         if (data.d) { // MEXC
+            let price = parseFloat(data.d.deals[0].p || 0);
             return {
-                price: parseFloat(data.d.deals[0]?.p || 0),
-                volume: parseFloat(data.d.deals[0]?.p || 0),
-                time: new Date(data.d.deals[0]?.t || Date.now()).toISOString(),
+                price: price,
+                volume: parseFloat(data.d.deals[0].v || 0) * price,
+                time: new Date(data.d.deals[0].t || Date.now()).toISOString(),
                 exchange: "MEXC"
             };
         } else if (data.e) { // Binance
+            let price =parseFloat(data.p || 0) ;
             return {
-                price: parseFloat(data.p || 0),
+                price: price,
+                volume: parseFloat(data.q || 0) * price,
                 time: new Date(data.T || Date.now()).toISOString(),
-                volume: parseFloat(data.q || 0),
                 exchange: "Binance"
             };
         } else {

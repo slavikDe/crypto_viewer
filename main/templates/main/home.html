@@ -97,7 +97,11 @@
             <li>📈 Interactive charts for in-depth analysis</li>
             <li>🛠️ Custom trading pair management</li>
         </ul>
-        <button onclick="goToCoinList()">Start Exploring</button>
+        <div style="display: flex; flex-direction:column; gap: 8px ">
+            <button onclick="goToCoinList()">Start Exploring</button>
+
+            <button onclick="goToLogIn()">Log in</button>
+        </div>
     </div>
 {% endblock %}
 
@@ -105,6 +109,9 @@
 	 <script>
         function goToCoinList() {
             window.location.href = "{% url 'coinList:index' %}";
+        }
+        function goToLogIn() {
+            window.location.href = "{% url 'user:login' %}";
         }
     </script>
 {% endblock %}

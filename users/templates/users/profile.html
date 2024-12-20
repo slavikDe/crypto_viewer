@@ -4,7 +4,7 @@
 {% block content %}
 	    <div class="row" style="margin: 0 !important;">
         <div class="container mt-5">
-            <div class="row" style="justify-content: center;">
+            <div class="row" style="justify-content: center; margin: 0 auto;">
                 <!-- Профиль с данными пользователя -->
                 <div class="col-md-5">
                     <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
@@ -74,8 +74,10 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-dark">Save</button>
-                        <button type="submit" id="deleteBtn" class="btn btn-dark">Delete account</button>
+                        <div style="margin: 0 auto ">
+                            <button type="submit" class="btn btn-dark" style="margin: 0 auto 20px auto;">Save</button>
+                            <button type="submit" id="deleteBtn" class="btn btn-outline-danger" style="margin: 0 auto;">Delete account</button>
+                        </div>
                         </form>
                     </div>
                 </div>

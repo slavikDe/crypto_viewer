@@ -1,8 +1,6 @@
 import json
 import os
 import uuid
-from linecache import cache
-
 import requests
 
 from django.conf import settings
@@ -16,18 +14,10 @@ from django.views.decorators.csrf import csrf_exempt
 from coins.models import Coins, Market
 from coinList.views import make_request
 
-# exchanges = [
-#     { 'name': 'MEXC', },
-#     { 'name': 'Binance', }
-# ]
-
-
-
 def coin(request, coin_slug):
-    exchange_name = request.GET.get('exchange')
+    exchange_name = request.GET.get('exchange') or 'MEXC'
 
     user = request.user
-    print("here")
 
     # Check in user's custom coins
     custom_coin = None
@@ -45,7 +35,6 @@ def coin(request, coin_slug):
         raise Http404("Coin not found")
 
     endpoint = '/api/v3/ticker/24hr'
-    print("endpoint: ", endpoint)
     diff_exchange = Market.objects.exclude(name=exchange_name).first()
 
     if is_custom:
@@ -53,7 +42,6 @@ def coin(request, coin_slug):
         coin_info = make_request(market.base_url + endpoint, param={'symbol': coin['symbol'].upper() + 'USDT'})
         exchange_to_compare = make_request(diff_exchange.base_url + endpoint,
                                                param={'symbol': coin['symbol'].upper() + 'USDT'})
-        print("custom coin path: :", coin['image'])
     else:
         try:
             coin = Coins.objects.get(slug=coin_slug)
@@ -77,9 +65,6 @@ def coin(request, coin_slug):
     ]
 
     standardized_exchanges = [standardize_exchange_data(exchange, standard_keys) for exchange in exchanges]
-    print("Standardized Exchanges:")
-    for ex in standardized_exchanges:
-        print(ex)
 
     context = {
         'coin': coin,  #
@@ -122,7 +107,6 @@ def update_coin(request):
         symbol = request.POST.get('symbol')
         image = request.FILES.get('image')
         is_custom = request.POST.get('is_custom') == 'true'
-        print("is_custom: ", request.POST.get('is_custom'))
         user = request.user
 
         try:
@@ -140,26 +124,24 @@ def update_coin(request):
 
                     ext = image.name.split('.')[-1]
                     filename = f"{uuid.uuid4()}.{ext}"
-                    custom_logo_path = os.path.join(settings.MEDIA_ROOT, 'customCoinLogo', filename)
 
-                    path = default_storage.save(custom_logo_path, ContentFile(image.read()))
-                    coin['image'] = os.path.join('media', path)
+                    relative_path = os.path.join('customCoinLogo', filename)
+                    saved_path = default_storage.save(relative_path, ContentFile(image.read()))
+
+                    coin['image'] = os.path.join('media', saved_path)
 
                 user.user_custom_pair = json.dumps(custom_coins)
                 user.save()
 
-                # print(f"Custom coin updated: {symbol}")
                 return JsonResponse({'success': True, 'message': 'Custom coin updated successfully!', 'redirect_url': reverse('coins:coin', kwargs={'coin_slug': symbol})})
 
             else:
                 coin = Coins.objects.get(symbol=symbol)
-                print("coin: ", coin)
                 if not coin:
                     return JsonResponse({'success': False, 'message': 'Default coin not found.'})
 
                 coin.name = name
                 if image:
-                    print("deleting default image path: ", coin.image.path)
                     delete_image(coin.image.path if coin.image else None)
 
                     ext = image.name.split('.')[-1]
@@ -170,13 +152,11 @@ def update_coin(request):
 
                 coin.save()
 
-                # print(f"Default coin updated: {symbol}")
                 return JsonResponse({'success': True, 'message': 'Default coin updated successfully!', 'redirect_url': reverse('coins:coin', kwargs={'coin_slug': symbol})})
 
         except Coins.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'Coin not found.'})
         except Exception as e:
-            print("Error:", e)
             return JsonResponse({'success': False, 'message': str(e)})
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
@@ -200,7 +180,6 @@ def delete_coin(request):
                 user.user_custom_pair = json.dumps(custom_coins)
                 user.save()
 
-                # print(f"Custom coin deleted: {symbol}")
                 return JsonResponse({'success': True, 'redirect_url': reverse('coinList:index')})
 
             else:
@@ -213,7 +192,6 @@ def delete_coin(request):
 
                 coin.delete()
 
-                # print(f"Default coin deleted: {symbol}")
                 return JsonResponse({'success': True, 'redirect_url': reverse('coinList:index')})
 
         except Coins.DoesNotExist:

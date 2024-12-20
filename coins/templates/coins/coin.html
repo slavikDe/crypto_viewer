@@ -28,8 +28,8 @@
                     </div>
                     <div>
 {#                        <div class="coin_name" id="coin-name">{{ coin.name|capfirst }}</div>#}
-                        <div class="coin_name" id="coin-name">{{ coin.symbol }}</div>
-                        <div>Price: $<span class="market_info_green">{{ coin_info.openPrice|floatformat:4 }}</span></div>
+                        <div class="coin_name" id="coin-name">{{ coin.name }}</div>
+                        <div>Price: $<span class="market_info_green">{{ coin_info.openPrice|floatformat:4|intcomma }}</span></div>
                     </div>
                 </div>
 
@@ -37,27 +37,36 @@
                     <div class="market_container">
                         <div class="market-info-item"><b>Change</b></div>
                         {% if '-' not in coin_info.priceChangePercent %}
-                            <div class="market-info-item positive">{{ coin_info.priceChange|floatformat:4 }} (USDT)</div>
-                            <div class="market-info-item positive">{{ coin_info.priceChangePercent|floatformat:4 }} (%)</div>
+                            <div class="market-info-item positive">{{ coin_info.priceChange|floatformat:4|intcomma }} (USDT)</div>
+                            <div class="market-info-item positive">{{ coin_info.priceChangePercent|floatformat:4|intcomma }} (%)</div>
                         {% else %}
-                            <div class="market-info-item negative">{{ coin_info.priceChange|floatformat:4 }} (USDT)</div>
-                            <div class="market-info-item negative">{{ coin_info.priceChangePercent|floatformat:4 }} (%)</div>
+                            <div class="market-info-item negative">{{ coin_info.priceChange|floatformat:4|intcomma }} (USDT)</div>
+                            <div class="market-info-item negative">{{ coin_info.priceChangePercent|floatformat:4|intcomma }} (%)</div>
                         {% endif %}
                     </div>
                     <div class="market_container">
                         <div class="market-info-item"><b>Min/Max</b></div>
-                        <div class="market-info-item">{{ coin_info.highPrice|floatformat:4 }}</div>
-                        <div class="market-info-item">{{ coin_info.lowPrice|floatformat:4 }}</div>
+                        <div class="market-info-item">{{ coin_info.highPrice|floatformat:4|intcomma }}</div>
+                        <div class="market-info-item">{{ coin_info.lowPrice|floatformat:4|intcomma }}</div>
                     </div>
                     <div class="market_container">
                         <div class="market-info-item"><b>Volume</b></div>
-                        <div class="market-info-item">{{ coin_info.volume|floatformat:4 }} ({{ coin.symbol }})</div>
-                        <div class="market-info-item">{{ coin_info.quoteVolume|floatformat:4 }} (USDT)</div>
+                        <div class="market-info-item">{{ coin_info.volume|floatformat:4|intcomma }} ({{ coin.symbol }})</div>
+                        <div class="market-info-item">{{ coin_info.quoteVolume|floatformat:4|intcomma }} (USDT)</div>
                     </div>
                 </div>
             </div>
-
             <div class="coin-edit">
+                <div class="form_exchange">
+                    <p>Select exchange to see data from the specified exchange </p>
+                    <form action="" method="get">
+                        <select id="exchange-selector" name="exchange" class="form-select mr-2" required>
+                            <option value="MEXC" {% if request.GET.exchange == "MEXC" %}selected{% endif %} class="exchange">MEXC</option>
+                            <option value="Binance" {% if request.GET.exchange == "Binance" %}selected{% endif %} class="exchange">BINANCE</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary" style="margin-left: 10px">Apply</button>
+                    </form>
+                </div>
                 <div class="coin-actions">
                     {% if is_custom %}
                         <!-- Actions for custom coins -->
@@ -65,92 +74,80 @@
                     {% else %}
                         {% if is_admin_user %}
                             <button id="editDefaultCoinBtn" class="btn btn-outline-success text-white">Edit Default Coin</button>
-                        {% else %}
-                            <p>You cannot edit this coin.</p>
                         {% endif %}
                     {% endif %}
                 </div>
 
-        <div class="form_exchange">
-            <form action="" method="get">
-                <select id="exchange-selector" name="exchange" class="form-select mr-2" required>
-                    <option value="MEXC" {% if request.GET.exchange == "MEXC" %}selected{% endif %} class="exchange">MEXC</option>
-                    <option value="Binance" {% if request.GET.exchange == "Binance" %}selected{% endif %} class="exchange">BINANCE</option>
-                </select>
-                <button type="submit" class="btn btn-primary" style="margin-left: 10px">Apply</button>
-            </form>
-        </div>
+                {#  <button id="openModalBtn" class="btn btn-outline-success text-white">Edit Coin</button> #}
+                <!-- Add coin -->
+                <div id="customCoinModal" class="modal">
+                    <div class="modal-edit">
+                        <div class="coin-modal-header-container">
+                           <h3 class="text-center mb-4 coin-modal-header">Coin details</h3>
+                           <span class="close-btn" id="closeModalBtn">&times;</span>
+                        </div>
+                        <form id="customCoinForm"  method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row" style="display: flex; flex-direction: column; justify-content: center; margin: 0 auto">
+                                <div style="text-align: center">
+                                    {% if coin.image %}
+                                        <img src="/{{ coin.image }}" alt="coin_image" class="img-fluid rounded-circle mb-1" id="image" style="max-width: 128px;">
+                                    {% else %}
+                                        <img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="img-fluid rounded-circle mb-1" id="image" style="max-width: 128px;">
+                                    {% endif %}
+                                    <input type="file" class="form-control" name="image" accept="image/*">
 
-{#        <button id="openModalBtn" class="btn btn-outline-success text-white">Edit Coin</button>#}
-        <!-- Add coin -->
-        <div id="customCoinModal" class="modal">
-            <div class="modal-edit">
-                <div class="coin-modal-header-container">
-                   <h3 class="text-center mb-4 coin-modal-header">Coin details</h3>
-                   <span class="close-btn" id="closeModalBtn">&times;</span>
-                </div>
-                <form id="customCoinForm"  method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row" style="display: flex; flex-direction: column; justify-content: center; margin: 0 auto">
-                        <div style="text-align: center">
-                            {% if coin.image %}
-                                <img src="/{{ coin.image }}" alt="coin_image" class="img-fluid rounded-circle mb-1" id="image" style="max-width: 128px;">
-                            {% else %}
-                                <img src="{% static 'deps/images/Not found image.png' %}" alt="logo" class="img-fluid rounded-circle mb-1" id="image" style="max-width: 128px;">
-                            {% endif %}
-                            <input type="file" class="form-control" name="image" accept="image/*">
-
-                            {% if form.image.errors %}
-                                <div class="alert alert-danger alert-dismissible fade show">{{ form.image.error }}</div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            <label for="symbol" class="form-label">Symbol</label>
-                            <input type="text" class="form-control" id="symbol"
-                                name="symbol"
-                                value="{{ coin.symbol }}" disabled>
-                            {# hidden fields for backend #}
-                            <input type="hidden" id="symbol" name="symbol" value="{{ coin.symbol }}">
-                            {% if form.symbol.error %}
-                                <div class="alert alert-danger alert-dismissible fade show">{{ form.symbol.error }}</div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name"
-                                name="name"
-                                value="{{ coin.name }}"
-                                placeholder="Ender new coin name">
-                            {% if form.name.error %}
-                                <div class="alert alert-danger alert-dismissible fade show">{{ form.name.error }}</div>
-                            {% endif %}
-                        </div>
-                        <div>
-                           <div>
-                                <label for="is_custom" class="form-label">Custom Coin</label>
-                                <input type="radio" id="is_custom" name="is_custom" {% if coin.is_custom %}checked{% endif %} disabled>
-                           </div>
-                            <div>
-                                <label for="is_default" class="form-label">Default Coin</label>
-                                <input type="radio" id="is_default" name="is_custom" {% if not coin.is_custom %}checked{% endif %} disabled>
+                                    {% if form.image.errors %}
+                                        <div class="alert alert-danger alert-dismissible fade show">{{ form.image.error }}</div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <label for="symbol" class="form-label">Symbol</label>
+                                    <input type="text" class="form-control" id="symbol"
+                                        name="symbol"
+                                        value="{{ coin.symbol }}" disabled>
+                                    {# hidden fields for backend #}
+                                    <input type="hidden" id="symbol" name="symbol" value="{{ coin.symbol }}">
+                                    {% if form.symbol.error %}
+                                        <div class="alert alert-danger alert-dismissible fade show">{{ form.symbol.error }}</div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name"
+                                        name="name"
+                                        value="{{ coin.name }}"
+                                        placeholder="Ender new coin name">
+                                    {% if form.name.error %}
+                                        <div class="alert alert-danger alert-dismissible fade show">{{ form.name.error }}</div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                   <div>
+                                        <label for="is_custom" class="form-label">Custom Coin</label>
+                                        <input type="radio" id="is_custom" name="is_custom" {% if is_custom %}checked{% endif %} disabled>
+                                   </div>
+                                    <div>
+                                        <label for="is_default" class="form-label">Default Coin</label>
+                                        <input type="radio" id="is_default" name="is_custom" {% if not is_custom %}checked{% endif %} disabled>
+                                    </div>
+{#                                     hidden field for send data to backend #}
+                                    <input type="hidden" name="is_custom" value="{% if is_custom %}true{% else %}false{% endif %}">
+                                </div>
                             </div>
-                            {# hidden field for send data to backend #}
-                            <input type="hidden" name="is_custom" value="{% if coin.is_custom %}true{% else %}false{% endif %}">
-                        </div>
-                    </div>
 
-                   <div class="d-flex justify-content-evenly mt-3">
-                        <button type="button" id="applyChanges" class="btn btn-outline-primary">
-                            <i class="fas fa-check-circle"></i> Apply
-                        </button>
-                        <button type="submit" id="deleteCoin" class="btn btn-outline-danger">
-                            <i class=""></i> Delete
-                        </button>
+                           <div class="d-flex justify-content-evenly mt-3">
+                                <button type="button" id="applyChanges" class="btn btn-outline-primary">
+                                    <i class="fas fa-check-circle"></i> Apply
+                                </button>
+                                <button type="submit" id="deleteCoin" class="btn btn-outline-danger">
+                                    <i class=""></i> Delete
+                                </button>
+                            </div>
+                            <p id="statusMessage" style="display: none;text-align: center"></p>
+                        </form>
                     </div>
-                    <p id="statusMessage" style="display: none;text-align: center"></p>
-                </form>
-            </div>
-            </div>
+                </div>
             </div>
         </div>
 
@@ -202,7 +199,7 @@
                                 <tr>
                                     <th>Time</th>
                                     <th>AVG Price (USDT)</th>
-                                    <th>Total Volume (BTC)</th>
+                                    <th>Total Volume</th>
                                     <th>Trades</th>
                                 </tr>
                             </thead>
@@ -219,7 +216,7 @@
                                 <tr>
                                     <th>Time</th>
                                     <th>AVG Price (USDT)</th>
-                                    <th>Total Volume (BTC)</th>
+                                    <th>Total Volume </th>
                                     <th>Trades</th>
                                 </tr>
                             </thead>
@@ -236,22 +233,37 @@
 {#                    <h3>{{ exchange.name|upper }}</h3>#}
                     <div class="general-info">
                         <h4>General Info 24h</h4>
-                        <div class="info-item">
-                            <span class="label">24h Change:</span>
-                            <span class="value {% if exchange.priceChange < 0 %}red{% else %}green{% endif %}">
-                                {{ exchange.priceChange|floatformat:2 }} USDT
-                            </span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label">24h Change Percent:</span>
-                            <span class="value {% if exchange.priceChangePercent < 0 %}red{% else %}green{% endif %}">
-                                {{ exchange.priceChangePercent|floatformat:4 }}%
-                            </span>
-                        </div>
+                        {% if exchange.priceChangePercent > 0 %}
+                            <div class="info-item">
+                                <span class="label">24h Change Percent:</span>
+                                <span class="value green">
+                                    {{ exchange.priceChangePercent|floatformat:4|intcomma }}%
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">24h Change:</span>
+                                <span class="value green">
+                                    {{ exchange.priceChange|floatformat:2|intcomma }} USDT
+                                </span>
+                            </div>
+                        {% else %}
+                              <div class="info-item">
+                                <span class="label">24h Change Percent:</span>
+                                <span class="value red">
+                                    {{ exchange.priceChangePercent|floatformat:4|intcomma }}%
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">24h Change:</span>
+                                <span class="value red">
+                                    {{ exchange.priceChange|floatformat:2|intcomma }} USDT
+                                </span>
+                            </div>
+                        {% endif %}
                         <div class="info-item">
                             <span class="label">Min Price:</span>
                             <span class="value {% if exchange.priceChange < 0 %}red{% else %}green{% endif %}">
-                                {{ exchange.lowPrice|floatformat:2 }}
+                                {{ exchange.lowPrice|floatformat:2|intcomma }}
                             </span>
                         </div>
                         <div class="info-item">
@@ -266,7 +278,7 @@
                         </div>
                         <div class="info-item">
                             <span class="label">Volume (BTC):</span>
-                            <span class="value">{{ exchange.volume|floatformat:2 }}</span>
+                            <span class="value">{{ exchange.volume|floatformat:2|intcomma }}</span>
                         </div>
                     </div>
                 </div>

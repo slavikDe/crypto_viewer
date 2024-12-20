@@ -78,7 +78,7 @@ def coin_list(request):
         ]
 
     coins_ = custom_coins + default_coins
-
+    print("customs: ", custom_coins)
     coins = []
     for coin in coins_:
         symbol_key = coin['symbol'].lower()
@@ -115,7 +115,8 @@ def add_coin_image(symbol_name):
     folder = 'media/custom_coins/coinLogo_/'
     url = f'https://api.coingecko.com/api/v3/coins/{coin_id}'
     response = requests.get(url)
-
+    print("add image status: ", response)
+    print("url: ", url)
     if response.status_code == 200:
         data = response.json()
         image_url = data['image']['small']
@@ -128,6 +129,7 @@ def add_coin_image(symbol_name):
             image_path = os.path.join(folder, f"{symbol_name.lower()}.png")
             with open(image_path, 'wb') as file:
                 file.write(image_response.content)
+            print("add ingage image path written: ", image_path)
             return image_path
     return None
 
@@ -261,6 +263,7 @@ def add_custom_coin(request):
 
             # Add image for custom coin
             image_path = add_coin_image(name)
+
             print("imagePath from custom adding 2 : ", image_path)
             coin_to_save = {
                 "symbol": symbol,
